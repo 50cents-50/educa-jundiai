@@ -154,14 +154,14 @@
             // Testa primeiro um login padrão que sempre funciona (para ajudar na apresentação)
             if (emailDigitado === "admin@50cents.com" && senhaDigitada === "admin") {
                 showToast('Login de administrador aprovado!');
-                setTimeout(() => window.location.href = 'index.html', 1500); // Redireciona para o painel
+                setTimeout(() => window.location.href = 'painel.html', 1500); // Redireciona para o painel
                 return;
             }
 
             // Testa o login cadastrado pelo usuário
             if (emailDigitado === emailSalvo && senhaDigitada === senhaSalva) {
                 showToast('Bem-vindo(a) de volta!');
-                setTimeout(() => window.location.href = 'index.html', 1500); // Redireciona para o painel
+                setTimeout(() => window.location.href = 'painel.html', 1500); // Redireciona para o painel
             } else {
                 showToast('E-mail ou senha incorretos. Tente novamente.', true);
             }
