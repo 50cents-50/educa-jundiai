@@ -3,176 +3,306 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>50cents - Liga Jovem</title>
+    <title>Educa Jundiaí - 50cents</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0B4A2B',    /* Verde Floresta Escuro */
+                        secondary: '#5CE1E6',  /* Verde Menta / Ciano */
+                        bglight: '#F4F6F8',    /* Cinza Claro (Fundo) */
+                        cardbg: '#FFFFFF',     /* Fundo do Cartão */
+                        darktext: '#333333',
+                        lighttext: '#666666'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* Variáveis de Cores Baseadas na sua Identidade Visual */
-        :root {
-            --bg-principal: #F4F6F8;
-            --bg-card: #FFFFFF;
-            --cor-primaria: #0B4A2B;
-            --cor-secundaria: #5CE1E6;
-            --texto-escuro: #333333;
-            --texto-claro: #666666;
+        /* Estilos adicionais para animações e scrollbar */
+        body { font-family: 'Inter', sans-serif; }
+        .toast-enter { animation: slideInRight 0.5s ease-out forwards; }
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
-
-        /* Reset Básico */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-principal);
-            color: var(--texto-escuro);
-            line-height: 1.6;
-        }
-
-        /* Cabeçalho */
-        header {
-            background-color: var(--bg-card);
-            padding: 20px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--cor-primaria);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Destaque do Logo (Bolinha ciano) */
-        .logo-dot {
-            height: 12px;
-            width: 12px;
-            background-color: var(--cor-secundaria);
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        /* Seção Principal (Hero) */
-        .hero {
-            text-align: center;
-            padding: 80px 20px;
-        }
-
-        .hero h1 {
-            color: var(--cor-primaria);
-            font-size: 42px;
-            margin-bottom: 15px;
-        }
-
-        .hero p {
-            color: var(--texto-claro);
-            max-width: 600px;
-            margin: 0 auto 30px auto;
-            font-size: 18px;
-        }
-
-        /* Botões */
-        .btn {
-            background-color: var(--cor-primaria);
-            color: #fff;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            text-decoration: none;
-        }
-
-        .btn:hover {
-            background-color: #083820; /* Tom mais escuro para o hover */
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            color: var(--cor-primaria);
-            border: 2px solid var(--cor-primaria);
-            margin-left: 10px;
-        }
-
-        .btn-outline:hover {
-            background-color: var(--cor-secundaria);
-            border-color: var(--cor-secundaria);
-            color: #fff;
-        }
-
-        /* Seção de Cartões (Inspirado no Dashboard) */
-        .cards-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            padding: 20px 50px 80px 50px;
-            flex-wrap: wrap;
-        }
-
-        .card {
-            background-color: var(--bg-card);
-            border-radius: 16px;
-            padding: 30px;
-            width: 300px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            border-top: 4px solid var(--cor-secundaria);
-        }
-
-        .card h3 {
-            color: var(--cor-primaria);
-            margin-bottom: 10px;
-        }
-
-        .card p {
-            color: var(--texto-claro);
-            font-size: 14px;
-        }
+        /* Barra de rolagem customizada */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #F4F6F8; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body>
+<body class="bg-bglight text-darktext flex h-screen overflow-hidden">
 
-    <header>
-        <div class="logo">
-            <span class="logo-dot"></span> 50cents
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2"></div>
+
+    <aside class="w-64 bg-primary text-white flex flex-col justify-between hidden md:flex shadow-xl z-10">
+        <div>
+            <div class="h-20 flex items-center px-6 border-b border-white/10">
+                <div class="flex items-center gap-3">
+                    <span class="h-4 w-4 bg-secondary rounded-full block"></span>
+                    <h1 class="text-2xl font-bold tracking-wider">50cents</h1>
+                </div>
+            </div>
+            
+            <nav class="p-4 space-y-2 text-sm font-medium">
+                <a href="#" class="flex items-center gap-3 px-4 py-3 bg-white/10 rounded-lg text-secondary border-l-4 border-secondary transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    Painel Educa Jundiaí
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition text-gray-300 hover:text-white">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Alerta Precoce (SAP)
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition text-gray-300 hover:text-white">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    Aprendizagem
+                </a>
+            </nav>
         </div>
-        <nav>
-            <a href="#" class="btn">Conheça o Projeto</a>
-        </nav>
-    </header>
+        
+        <div class="p-6 border-t border-white/10 text-xs text-gray-400">
+            <p>Liga Jovem 2024</p>
+            <p>Escolas Públicas - Jundiaí</p>
+        </div>
+    </aside>
 
-    <main>
-        <section class="hero">
-            <h1>Tecnologia, Educação e Esperança</h1>
-            <p>Este é o espaço inicial do nosso projeto na Liga Jovem. Vamos transformar ideias em soluções reais para a nossa comunidade.</p>
-            <a href="#" class="btn">Saiba Mais</a>
-            <a href="#" class="btn btn-outline">Fale Conosco</a>
-        </section>
+    <div class="flex-1 flex flex-col h-screen">
+        
+        <header class="h-20 bg-cardbg shadow-sm flex items-center justify-between px-8 z-0">
+            <div>
+                <h2 class="text-xl font-bold text-primary">Projeto Educa Jundiaí</h2>
+                <p class="text-sm text-lighttext">Tecnologia e humanização contra a evasão escolar e a defasagem no Jardim São Camilo e Novo Horizonte.</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="text-right hidden sm:block">
+                    <p class="text-sm font-bold text-darktext">Coordenação 50cents</p>
+                    <p class="text-xs text-lighttext">Rede Pública</p>
+                </div>
+                <div class="h-10 w-10 bg-primary rounded-full flex items-center justify-center text-white font-bold border-2 border-secondary">
+                    50c
+                </div>
+            </div>
+        </header>
 
-        <section class="cards-container">
-            <div class="card">
-                <h3>Nosso Objetivo</h3>
-                <p>Texto temporário. Aqui explicaremos a missão principal do projeto 50cents na Liga Jovem.</p>
+        <main class="flex-1 overflow-y-auto p-8">
+            
+            <div class="mb-8">
+                <h3 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                    Diagnóstico Local e Eixos de Atuação
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-cardbg p-5 rounded-xl shadow-sm border-l-4 border-primary hover:shadow-md transition">
+                        <h4 class="font-bold text-darktext mb-2">1. Evasão Escolar</h4>
+                        <p class="text-sm text-lighttext">Combate ao desengajamento e abandono prematuro das salas de aula nas comunidades vulneráveis.</p>
+                    </div>
+                    <div class="bg-cardbg p-5 rounded-xl shadow-sm border-l-4 border-secondary hover:shadow-md transition">
+                        <h4 class="font-bold text-darktext mb-2">2. Defasagem</h4>
+                        <p class="text-sm text-lighttext">Soluções para conteúdos acumulados e falta de personalização no ensino público.</p>
+                    </div>
+                    <div class="bg-cardbg p-5 rounded-xl shadow-sm border-l-4 border-red-400 hover:shadow-md transition">
+                        <h4 class="font-bold text-darktext mb-2">3. Bullying</h4>
+                        <p class="text-sm text-lighttext">Necessidade urgente de proteção, monitorização e um canal de denúncia segura e anônima.</p>
+                    </div>
+                </div>
             </div>
-            <div class="card">
-                <h3>A Solução</h3>
-                <p>Texto temporário. Detalhes sobre como a nossa tecnologia vai resolver o problema escolhido.</p>
-            </div>
-            <div class="card">
-                <h3>A Equipe</h3>
-                <p>Texto temporário. Apresentação rápida dos membros incríveis que fazem isso acontecer.</p>
-            </div>
-        </section>
-    </main>
 
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                
+                <div class="bg-cardbg p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-primary text-white text-xs font-bold px-3 py-1 rounded-bl-lg">IA Ativa</div>
+                    <h3 class="text-xl font-bold text-primary mb-2">Sistema de Alerta Precoce (SAP)</h3>
+                    <p class="text-sm text-lighttext mb-4">Cruza dados de faltas, comportamento e notas por Inteligência Artificial para prever o risco de abandono antes que aconteça.</p>
+                    
+                    <div class="flex gap-4 mb-4">
+                        <div class="bg-bglight p-3 rounded-lg flex-1 text-center">
+                            <span class="block text-2xl font-bold text-primary">350</span>
+                            <span class="text-xs text-lighttext">Alunos Monitorizados</span>
+                        </div>
+                        <div class="bg-bglight p-3 rounded-lg flex-1 text-center">
+                            <span class="block text-2xl font-bold text-secondary">87%</span>
+                            <span class="text-xs text-lighttext">Meta de Retenção</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-red-50 border border-red-200 p-4 rounded-xl flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-bold text-red-700">Aluno: João S.</p>
+                            <p class="text-xs text-red-500">Risco Alto de Evasão por Faltas</p>
+                        </div>
+                        <button id="btn-chamada" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-2 px-4 rounded-lg shadow transition">
+                            Disparar Chamada Automatizada
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-cardbg p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <h3 class="text-xl font-bold text-primary mb-2">Aprendizagem Adaptativa</h3>
+                    <p class="text-sm text-lighttext mb-4">Plataformas com exercícios que mudam conforme o ritmo do aluno, reforçando a base em Matemática e Português fora do horário de aula.</p>
+                    
+                    <button id="btn-assistente" class="w-full bg-primary hover:bg-[#083820] text-white font-bold py-3 px-4 rounded-xl shadow transition flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                        Testar Assistente Virtual 24h
+                    </button>
+
+                    <div id="chat-box" class="hidden mt-4 bg-bglight rounded-xl p-4 border border-gray-200">
+                        <div class="flex gap-3 mb-2">
+                            <div class="h-8 w-8 bg-secondary rounded-full flex items-center justify-center text-white font-bold text-xs shrink-0">IA</div>
+                            <div class="bg-white p-3 rounded-lg rounded-tl-none shadow-sm text-sm text-darktext">
+                                <strong>[Assistente Educa]:</strong> Olá! Que dúvida de Matemática vamos resolver juntos hoje?
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-cardbg p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <h3 class="text-xl font-bold text-primary mb-2">Segurança e Bem-estar Escolar</h3>
+                    <p class="text-sm text-lighttext mb-4">Ferramentas de telepsicologia (apoio online) e um sistema de combate ao bullying focado na proteção dos alunos.</p>
+                    
+                    <div class="bg-bglight p-5 rounded-xl">
+                        <h4 class="text-sm font-bold text-darktext mb-3">Canal de Denúncia Anti-Bullying Segura</h4>
+                        <form id="form-denuncia" class="flex flex-col gap-3">
+                            <textarea id="texto-denuncia" rows="3" class="w-full p-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary resize-none" placeholder="Descreva a ocorrência de forma anónima..." required></textarea>
+                            <button type="submit" class="self-end bg-secondary hover:bg-[#4bc6cb] text-primary font-bold py-2 px-6 rounded-lg shadow transition">
+                                Enviar Denúncia Segura
+                            </button>
+                        </form>
+                        <p id="msg-sucesso-denuncia" class="hidden mt-3 text-sm font-bold text-green-600 text-center">
+                            Denúncia registada anonimamente com sucesso. A coordenação foi alertada!
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-cardbg p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <h3 class="text-xl font-bold text-primary mb-2">Eficiência, Gestão e Captação</h3>
+                    <p class="text-sm text-lighttext mb-4">Gestão em Nuvem para controlo de desperdício de merenda e livros, além de Campanhas Online de apoio financeiro.</p>
+                    
+                    <div class="border border-gray-100 rounded-xl p-5">
+                        <div class="flex justify-between items-end mb-2">
+                            <h4 class="text-sm font-bold text-darktext">Campanha: Melhoria da Quadra Escolar</h4>
+                            <span id="progresso-texto" class="text-sm font-bold text-secondary">75%</span>
+                        </div>
+                        
+                        <div class="w-full bg-gray-200 rounded-full h-3 mb-5 overflow-hidden">
+                            <div id="barra-progresso" class="bg-secondary h-3 rounded-full transition-all duration-1000 ease-out" style="width: 75%"></div>
+                        </div>
+
+                        <button id="btn-doacao" class="w-full bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold py-2 px-4 rounded-xl transition">
+                            Simular Doação de Empresa
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Função utilitária para criar Notificações (Toasts)
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            // Cores baseadas no tipo
+            const bgColor = type === 'success' ? 'bg-green-600' : 'bg-primary';
+            
+            toast.className = `${bgColor} text-white px-6 py-3 rounded-lg shadow-lg font-bold text-sm flex items-center gap-2 toast-enter`;
+            toast.innerHTML = `
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                ${message}
+            `;
+            
+            container.appendChild(toast);
+            
+            // Remover após 4 segundos
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.5s ease';
+                setTimeout(() => toast.remove(), 500);
+            }, 4000);
+        }
+
+        // --- INTERAÇÃO A: Disparar Chamada Automatizada ---
+        document.getElementById('btn-chamada').addEventListener('click', function() {
+            showToast('Sucesso: Notificação instantânea enviada para o telemóvel do responsável do aluno João S.!');
+            // Efeito visual no botão
+            this.innerText = "Chamada Enviada!";
+            this.classList.replace('bg-red-600', 'bg-gray-400');
+            this.classList.replace('hover:bg-red-700', 'cursor-not-allowed');
+            this.disabled = true;
+        });
+
+        // --- INTERAÇÃO B: Assistente Virtual ---
+        document.getElementById('btn-assistente').addEventListener('click', function() {
+            const chatBox = document.getElementById('chat-box');
+            if(chatBox.classList.contains('hidden')) {
+                chatBox.classList.remove('hidden');
+                this.innerHTML = "Ocultar Assistente Virtual";
+            } else {
+                chatBox.classList.add('hidden');
+                this.innerHTML = `
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                    Testar Assistente Virtual 24h
+                `;
+            }
+        });
+
+        // --- INTERAÇÃO C: Formulário Anti-Bullying ---
+        document.getElementById('form-denuncia').addEventListener('submit', function(e) {
+            e.preventDefault(); // Evita recarregar a página
+            
+            const input = document.getElementById('texto-denuncia');
+            const msgSucesso = document.getElementById('msg-sucesso-denuncia');
+            
+            if(input.value.trim() !== "") {
+                input.value = ""; // Limpa o campo
+                msgSucesso.classList.remove('hidden'); // Mostra a mensagem
+                
+                // Oculta a mensagem após 5 segundos para poder testar de novo
+                setTimeout(() => {
+                    msgSucesso.classList.add('hidden');
+                }, 5000);
+            }
+        });
+
+        // --- INTERAÇÃO D: Barra de Progresso Crowdfunding ---
+        document.getElementById('btn-doacao').addEventListener('click', function() {
+            const barra = document.getElementById('barra-progresso');
+            const texto = document.getElementById('progresso-texto');
+            
+            // Anima a barra e altera o texto
+            barra.style.width = '85%';
+            
+            // Efeito contador numérico rápido
+            let count = 75;
+            const interval = setInterval(() => {
+                if(count >= 85) {
+                    clearInterval(interval);
+                    showToast('Doação recebida! A comunidade agradece o apoio.', 'primary');
+                } else {
+                    count++;
+                    texto.innerText = count + '%';
+                }
+            }, 50); // Velocidade do contador
+
+            // Desabilita o botão após simular
+            this.innerText = "Doação Simulada com Sucesso!";
+            this.classList.add('cursor-not-allowed', 'opacity-50');
+            this.disabled = true;
+        });
+    </script>
 </body>
 </html>
