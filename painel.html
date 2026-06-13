@@ -96,7 +96,7 @@
         </header>
 
         <main class="flex-1 overflow-y-auto p-8">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 h-full items-start">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full items-start">
                 
                 <div class="bg-cardbg p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden h-full flex flex-col justify-between">
                     <div>
@@ -135,29 +135,6 @@
                     <p class="text-xs text-gray-400 max-w-[200px] mt-1">Espaço reservado para as atualizações da escola e listagem de acervo didático.</p>
                 </div>
 
-                <div class="bg-cardbg p-6 rounded-2xl shadow-sm border border-gray-100 h-full flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-xl font-bold text-primary mb-2">Aprendizagem Adaptativa</h3>
-                        <p class="text-sm text-lighttext mb-6">Plataforma complementar que personaliza o ritmo de estudos em Matemática e Português fora do horário letivo.</p>
-                    </div>
-                    
-                    <div>
-                        <button id="btn-assistente" class="w-full bg-primary hover:bg-[#083820] text-white font-bold py-3 px-4 rounded-xl shadow transition flex items-center justify-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
-                            Testar Assistente Virtual 24h
-                        </button>
-
-                        <div id="chat-box" class="hidden mt-4 bg-bglight rounded-xl p-4 border border-gray-200 text-left">
-                            <div class="flex gap-3">
-                                <div class="h-8 w-8 bg-secondary rounded-full flex items-center justify-center text-white font-bold text-xs shrink-0">IA</div>
-                                <div class="bg-white p-3 rounded-lg rounded-tl-none shadow-sm text-sm text-darktext">
-                                    <strong>[Assistente]:</strong> Olá! Que dúvida de conteúdo ou atividade vamos conferir hoje?
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </main>
     </div>
@@ -185,21 +162,6 @@
             this.innerText = "Enviado!";
             this.className = "bg-gray-400 text-white text-xs font-bold py-2 px-4 rounded-lg cursor-not-allowed";
             this.disabled = true;
-        });
-
-        // Interação do Assistente Virtual
-        document.getElementById('btn-assistente').addEventListener('click', function() {
-            const chatBox = document.getElementById('chat-box');
-            if(chatBox.classList.contains('hidden')) {
-                chatBox.classList.remove('hidden');
-                this.innerHTML = "Ocultar Assistente";
-            } else {
-                chatBox.classList.add('hidden');
-                this.innerHTML = `
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
-                    Testar Assistente Virtual 24h
-                `;
-            }
         });
     </script>
 </body>
