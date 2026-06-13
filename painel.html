@@ -31,11 +31,6 @@
     
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .toast-enter { animation: slideInRight 0.5s ease-out forwards; }
-        @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #F4F6F8; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -43,8 +38,6 @@
     </style>
 </head>
 <body class="bg-bglight text-darktext flex h-screen overflow-hidden">
-
-    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2"></div>
 
     <aside class="w-64 bg-primary text-white flex flex-col justify-between hidden md:flex shadow-xl z-10">
         <div>
@@ -58,7 +51,7 @@
             <nav class="p-4 space-y-2 text-sm font-medium">
                 <a href="#" class="flex items-center gap-3 px-4 py-3 bg-white/10 rounded-lg text-secondary border-l-4 border-secondary transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                    Painel Educa Jundiaí
+                    Início
                 </a>
                 <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition text-gray-300 hover:text-white">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2"></path></svg>
@@ -82,7 +75,6 @@
         <header class="h-20 bg-cardbg shadow-sm flex items-center justify-between px-8 z-0">
             <div>
                 <h2 class="text-xl font-bold text-primary">E.M.E.B. Deputado Ranieri Masili</h2>
-                <p class="text-sm text-lighttext">Projeto Educa Jundiaí — Combate à evasão escolar e suporte tecnológico integrado.</p>
             </div>
             <div class="flex items-center gap-4">
                 <div class="text-right hidden sm:block">
@@ -95,74 +87,16 @@
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto p-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full items-start">
-                
-                <div class="bg-cardbg p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden h-full flex flex-col justify-between">
-                    <div>
-                        <div class="absolute top-0 right-0 bg-primary text-white text-xs font-bold px-3 py-1 rounded-bl-lg">IA Ativa</div>
-                        <h3 class="text-xl font-bold text-primary mb-2">Controle de Faltas (SAP)</h3>
-                        <p class="text-sm text-lighttext mb-6">Cruza dados de frequência e notas por Inteligência Artificial para prever e mitigar o risco de abandono escolar.</p>
-                        
-                        <div class="flex gap-4 mb-6">
-                            <div class="bg-bglight p-3 rounded-lg flex-1 text-center">
-                                <span class="block text-2xl font-bold text-primary">350</span>
-                                <span class="text-xs text-lighttext">Alunos Monitorados</span>
-                            </div>
-                            <div class="bg-bglight p-3 rounded-lg flex-1 text-center">
-                                <span class="block text-2xl font-bold text-secondary">87%</span>
-                                <span class="text-xs text-lighttext">Meta de Retenção</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-red-50 border border-red-200 p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                        <div>
-                            <p class="text-sm font-bold text-red-700">Aluno: João S.</p>
-                            <p class="text-xs text-red-500">Risco Alto de Evasão por Faltas</p>
-                        </div>
-                        <button id="btn-chamada" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-2 px-4 rounded-lg shadow transition w-full sm:w-auto whitespace-nowrap">
-                            Disparar Chamada
-                        </button>
-                    </div>
+        <main class="flex-1 overflow-y-auto p-8 flex flex-col">
+            <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 flex-1 flex flex-col items-center justify-center text-center bg-gray-50/50">
+                <div class="bg-gray-200/60 p-5 rounded-full text-gray-400 mb-4">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
                 </div>
-
-                <div class="border-2 border-dashed border-gray-300 rounded-2xl p-6 h-full flex flex-col items-center justify-center text-center bg-gray-50/50 min-h-[300px]">
-                    <div class="bg-gray-200/60 p-4 rounded-full text-gray-400 mb-3">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                    </div>
-                    <h4 class="text-base font-bold text-gray-500">Comunicados & Livros</h4>
-                    <p class="text-xs text-gray-400 max-w-[200px] mt-1">Espaço reservado para as atualizações da escola e listagem de acervo didático.</p>
-                </div>
-
+                <h4 class="text-xl font-bold text-gray-500">Comunicados & Livros</h4>
+                <p class="text-sm text-gray-400 max-w-sm mt-2">Espaço reservado para as atualizações da escola, avisos gerais e listagem do acervo didático.</p>
             </div>
         </main>
     </div>
 
-    <script>
-        function showToast(message) {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg font-bold text-sm flex items-center gap-2 toast-enter`;
-            toast.innerHTML = `
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                ${message}
-            `;
-            container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transition = 'opacity 0.5s ease';
-                setTimeout(() => toast.remove(), 500);
-            }, 4000);
-        }
-
-        // Interação de Chamada Automatizada
-        document.getElementById('btn-chamada').addEventListener('click', function() {
-            showToast('Sucesso: Alerta enviado ao celular do responsável de João S.!');
-            this.innerText = "Enviado!";
-            this.className = "bg-gray-400 text-white text-xs font-bold py-2 px-4 rounded-lg cursor-not-allowed";
-            this.disabled = true;
-        });
-    </script>
 </body>
 </html>
