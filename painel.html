@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +14,7 @@
                     colors: {
                         primary: '#0B4A2B',    /* Verde Floresta Escuro */
                         secondary: '#5CE1E6',  /* Verde Menta / Ciano */
-                        bglight: '#F4F6F8',    /* Cinza Claro (Fundo) */
+                        bglight: '#F4F6F8',    /* Cinzento Claro (Fundo) */
                         cardbg: '#FFFFFF',     /* Fundo do Cartão */
                         darktext: '#333333',
                         lighttext: '#666666'
@@ -64,11 +64,15 @@
                 </a>
                 <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition text-gray-300 hover:text-white">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                    Alerta Precoce (SAP)
+                    Controlo de Faltas (SAP)
                 </a>
                 <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition text-gray-300 hover:text-white">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    Aprendizagem
+                    Gestão de Livros
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition text-gray-300 hover:text-white">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    Denúncia Segura
                 </a>
             </nav>
         </div>
@@ -99,32 +103,11 @@
 
         <main class="flex-1 overflow-y-auto p-8">
             
-            <div class="mb-8">
-                <h3 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                    Diagnóstico Local e Eixos de Atuação
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-cardbg p-5 rounded-xl shadow-sm border-l-4 border-primary hover:shadow-md transition">
-                        <h4 class="font-bold text-darktext mb-2">1. Evasão Escolar</h4>
-                        <p class="text-sm text-lighttext">Combate ao desengajamento e abandono prematuro das salas de aula nas comunidades vulneráveis.</p>
-                    </div>
-                    <div class="bg-cardbg p-5 rounded-xl shadow-sm border-l-4 border-secondary hover:shadow-md transition">
-                        <h4 class="font-bold text-darktext mb-2">2. Defasagem</h4>
-                        <p class="text-sm text-lighttext">Soluções para conteúdos acumulados e falta de personalização no ensino público.</p>
-                    </div>
-                    <div class="bg-cardbg p-5 rounded-xl shadow-sm border-l-4 border-red-400 hover:shadow-md transition">
-                        <h4 class="font-bold text-darktext mb-2">3. Bullying</h4>
-                        <p class="text-sm text-lighttext">Necessidade urgente de proteção, monitorização e um canal de denúncia segura e anônima.</p>
-                    </div>
-                </div>
-            </div>
-
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
                 
                 <div class="bg-cardbg p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
                     <div class="absolute top-0 right-0 bg-primary text-white text-xs font-bold px-3 py-1 rounded-bl-lg">IA Ativa</div>
-                    <h3 class="text-xl font-bold text-primary mb-2">Sistema de Alerta Precoce (SAP)</h3>
+                    <h3 class="text-xl font-bold text-primary mb-2">Sistema de Alerta Precoce (SAP) - FALTAS</h3>
                     <p class="text-sm text-lighttext mb-4">Cruza dados de faltas, comportamento e notas por Inteligência Artificial para prever o risco de abandono antes que aconteça.</p>
                     
                     <div class="flex gap-4 mb-4">
@@ -150,8 +133,8 @@
                 </div>
 
                 <div class="bg-cardbg p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <h3 class="text-xl font-bold text-primary mb-2">Aprendizagem Adaptativa</h3>
-                    <p class="text-sm text-lighttext mb-4">Plataformas com exercícios que mudam conforme o ritmo do aluno, reforçando a base em Matemática e Português fora do horário de aula.</p>
+                    <h3 class="text-xl font-bold text-primary mb-2">Aprendizagem Adaptativa - LIVROS</h3>
+                    <p class="text-sm text-lighttext mb-4">Plataformas com exercícios que mudam conforme o ritmo do aluno, reforçando a base em Matemática e Português fora do horário de aula e gestão de livros.</p>
                     
                     <button id="btn-assistente" class="w-full bg-primary hover:bg-[#083820] text-white font-bold py-3 px-4 rounded-xl shadow transition flex items-center justify-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
@@ -162,14 +145,14 @@
                         <div class="flex gap-3 mb-2">
                             <div class="h-8 w-8 bg-secondary rounded-full flex items-center justify-center text-white font-bold text-xs shrink-0">IA</div>
                             <div class="bg-white p-3 rounded-lg rounded-tl-none shadow-sm text-sm text-darktext">
-                                <strong>[Assistente Educa]:</strong> Olá! Que dúvida de Matemática vamos resolver juntos hoje?
+                                <strong>[Assistente Educa]:</strong> Olá! Que dúvida de Matemática ou pedido de Livro vamos resolver juntos hoje?
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="bg-cardbg p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <h3 class="text-xl font-bold text-primary mb-2">Segurança e Bem-estar Escolar</h3>
+                    <h3 class="text-xl font-bold text-primary mb-2">Segurança e Bem-estar Escolar - DENÚNCIA SEGURA</h3>
                     <p class="text-sm text-lighttext mb-4">Ferramentas de telepsicologia (apoio online) e um sistema de combate ao bullying focado na proteção dos alunos.</p>
                     
                     <div class="bg-bglight p-5 rounded-xl">
@@ -183,26 +166,6 @@
                         <p id="msg-sucesso-denuncia" class="hidden mt-3 text-sm font-bold text-green-600 text-center">
                             Denúncia registada anonimamente com sucesso. A coordenação foi alertada!
                         </p>
-                    </div>
-                </div>
-
-                <div class="bg-cardbg p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <h3 class="text-xl font-bold text-primary mb-2">Eficiência, Gestão e Captação</h3>
-                    <p class="text-sm text-lighttext mb-4">Gestão em Nuvem para controlo de desperdício de merenda e livros, além de Campanhas Online de apoio financeiro.</p>
-                    
-                    <div class="border border-gray-100 rounded-xl p-5">
-                        <div class="flex justify-between items-end mb-2">
-                            <h4 class="text-sm font-bold text-darktext">Campanha: Melhoria da Quadra Escolar</h4>
-                            <span id="progresso-texto" class="text-sm font-bold text-secondary">75%</span>
-                        </div>
-                        
-                        <div class="w-full bg-gray-200 rounded-full h-3 mb-5 overflow-hidden">
-                            <div id="barra-progresso" class="bg-secondary h-3 rounded-full transition-all duration-1000 ease-out" style="width: 75%"></div>
-                        </div>
-
-                        <button id="btn-doacao" class="w-full bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold py-2 px-4 rounded-xl transition">
-                            Simular Doação de Empresa
-                        </button>
                     </div>
                 </div>
 
@@ -276,32 +239,6 @@
                     msgSucesso.classList.add('hidden');
                 }, 5000);
             }
-        });
-
-        // --- INTERAÇÃO D: Barra de Progresso Crowdfunding ---
-        document.getElementById('btn-doacao').addEventListener('click', function() {
-            const barra = document.getElementById('barra-progresso');
-            const texto = document.getElementById('progresso-texto');
-            
-            // Anima a barra e altera o texto
-            barra.style.width = '85%';
-            
-            // Efeito contador numérico rápido
-            let count = 75;
-            const interval = setInterval(() => {
-                if(count >= 85) {
-                    clearInterval(interval);
-                    showToast('Doação recebida! A comunidade agradece o apoio.', 'primary');
-                } else {
-                    count++;
-                    texto.innerText = count + '%';
-                }
-            }, 50); // Velocidade do contador
-
-            // Desabilita o botão após simular
-            this.innerText = "Doação Simulada com Sucesso!";
-            this.classList.add('cursor-not-allowed', 'opacity-50');
-            this.disabled = true;
         });
     </script>
 </body>
