@@ -6,165 +6,110 @@
     <title>Login - Educa Jundiaí</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#0B4A2B',
-                        secondary: '#5CE1E6',
-                        bglight: '#F4F6F8',
-                        cardbg: '#FFFFFF'
+                        primary: '#0B4A2B',    /* Verde Floresta Escuro */
+                        secondary: '#5CE1E6',  /* Verde Menta / Ciano */
+                        bglight: '#F4F6F8',    /* Cinzento Claro (Fundo) */
+                        cardbg: '#FFFFFF',     /* Fundo do Cartão */
+                        darktext: '#333333',
+                        lighttext: '#666666'
                     },
-                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
                 }
             }
         }
     </script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .toast-enter { animation: slideInRight 0.5s ease-out forwards; }
-        @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
     </style>
 </head>
-<body class="bg-bglight flex items-center justify-center min-h-screen">
+<body class="bg-bglight flex items-center justify-center h-screen">
 
-    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2"></div>
-
-    <div class="bg-cardbg w-full max-w-md p-8 rounded-2xl shadow-lg border border-gray-100">
+    <div class="bg-cardbg p-10 rounded-2xl shadow-xl w-full max-w-md border border-gray-100">
         
         <div class="text-center mb-8">
-            <div class="flex items-center justify-center gap-2 mb-2">
-                <span class="h-4 w-4 bg-secondary rounded-full block"></span>
+            <div class="flex items-center justify-center gap-3 mb-4">
+                <span class="h-6 w-6 bg-secondary rounded-full block"></span>
                 <h1 class="text-3xl font-bold text-primary tracking-wider">50cents</h1>
             </div>
-            <h2 class="text-xl font-bold text-gray-800">Acesso ao Educa Jundiaí</h2>
-            <p class="text-sm text-gray-500 mt-1">Gestão, Professores e Coordenação</p>
+            <h2 class="text-xl font-bold text-darktext">Acesso ao Sistema</h2>
+            <p class="text-sm text-lighttext mt-2">E.M.E.B. Deputado Ranieri Masili</p>
         </div>
 
-        <div class="flex mb-6 border-b border-gray-200">
-            <button id="tab-login" class="flex-1 py-2 font-bold text-primary border-b-2 border-primary transition">Entrar</button>
-            <button id="tab-cadastro" class="flex-1 py-2 font-bold text-gray-400 border-b-2 border-transparent hover:text-primary transition">Cadastrar</button>
-        </div>
+        <form id="form-login" class="space-y-6">
+            <div>
+                <label for="email" class="block text-sm font-medium text-darktext mb-1">E-mail</label>
+                <input type="email" id="email" required 
+                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition"
+                       placeholder="Insira seu e-mail">
+            </div>
 
-        <form id="form-login" class="flex flex-col gap-4">
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">E-mail</label>
-                <input type="email" id="login-email" class="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" placeholder="seu@email.com" required>
+                <label for="senha" class="block text-sm font-medium text-darktext mb-1">Senha</label>
+                <input type="password" id="senha" required 
+                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition"
+                       placeholder="Insira sua senha">
             </div>
-            <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Senha</label>
-                <input type="password" id="login-senha" class="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" placeholder="••••••••" required>
-            </div>
-            <button type="submit" class="w-full bg-primary hover:bg-[#083820] text-white font-bold py-3 rounded-xl shadow transition mt-2">
+
+            <button type="submit" 
+                    class="w-full bg-primary hover:bg-[#083820] text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-200">
                 Entrar no Painel
             </button>
         </form>
 
-        <form id="form-cadastro" class="flex flex-col gap-4 hidden">
-            <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">E-mail de Cadastro</label>
-                <input type="email" id="cadastro-email" class="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary" placeholder="seu@email.com" required>
-            </div>
-            <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Criar Senha</label>
-                <input type="password" id="cadastro-senha" class="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary" placeholder="••••••••" required>
-            </div>
-            <button type="submit" class="w-full bg-secondary hover:bg-[#4bc6cb] text-primary font-bold py-3 rounded-xl shadow transition mt-2">
-                Criar Conta
-            </button>
-        </form>
-
+        <div id="alerta-reset" class="hidden mt-4 p-3 bg-green-100 text-green-700 text-sm font-bold text-center rounded-lg border border-green-200">
+            Todos os cadastros foram zerados com sucesso!
+        </div>
+        
+        <div class="mt-6 text-center">
+            <p class="text-xs text-lighttext">Projeto Educa Jundiaí - Liga Jovem 2024</p>
+        </div>
     </div>
 
     <script>
-        // Sistema de Notificações
-        function showToast(message, isError = false) {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            const bgColor = isError ? 'bg-red-500' : 'bg-green-600';
-            
-            toast.className = `${bgColor} text-white px-6 py-3 rounded-lg shadow-lg font-bold text-sm flex items-center gap-2 toast-enter`;
-            toast.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> ${message}`;
-            
-            container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transition = 'opacity 0.5s ease';
-                setTimeout(() => toast.remove(), 500);
-            }, 3000);
-        }
+        document.getElementById('form-login').addEventListener('submit', function(e) {
+            e.preventDefault(); // Evita que a página recarregue
 
-        // Alternar entre abas
-        const tabLogin = document.getElementById('tab-login');
-        const tabCadastro = document.getElementById('tab-cadastro');
-        const formLogin = document.getElementById('form-login');
-        const formCadastro = document.getElementById('form-cadastro');
+            const email = document.getElementById('email').value.trim();
+            const senha = document.getElementById('senha').value.trim();
+            const alerta = document.getElementById('alerta-reset');
 
-        function switchTab(showLogin) {
-            if (showLogin) {
-                formLogin.classList.remove('hidden');
-                formCadastro.classList.add('hidden');
-                tabLogin.classList.add('text-primary', 'border-primary');
-                tabLogin.classList.remove('text-gray-400', 'border-transparent');
-                tabCadastro.classList.add('text-gray-400', 'border-transparent');
-                tabCadastro.classList.remove('text-primary', 'border-primary');
-            } else {
-                formLogin.classList.add('hidden');
-                formCadastro.classList.remove('hidden');
-                tabCadastro.classList.add('text-primary', 'border-primary');
-                tabCadastro.classList.remove('text-gray-400', 'border-transparent');
-                tabLogin.classList.add('text-gray-400', 'border-transparent');
-                tabLogin.classList.remove('text-primary', 'border-primary');
-            }
-        }
-
-        tabLogin.addEventListener('click', () => switchTab(true));
-        tabCadastro.addEventListener('click', () => switchTab(false));
-
-        // Lógica de CADASTRO (Salvando apenas e-mail e senha no LocalStorage)
-        formCadastro.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('cadastro-email').value;
-            const senha = document.getElementById('cadastro-senha').value;
-
-            // Simula salvar no banco
-            localStorage.setItem('educa_user_email', email);
-            localStorage.setItem('educa_user_senha', senha);
-
-            showToast('Cadastro realizado com sucesso! Faça login.');
-            formCadastro.reset();
-            switchTab(true); // Volta para a tela de login
-        });
-
-        // Lógica de LOGIN
-        formLogin.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const emailDigitado = document.getElementById('login-email').value;
-            const senhaDigitada = document.getElementById('login-senha').value;
-
-            const emailSalvo = localStorage.getItem('educa_user_email');
-            const senhaSalva = localStorage.getItem('educa_user_senha');
-
-            // Testa primeiro um login padrão que sempre funciona (para ajudar na apresentação)
-            if (emailDigitado === "admin@50cents.com" && senhaDigitada === "admin") {
-                showToast('Login de administrador aprovado!');
-                setTimeout(() => window.location.href = 'painel.html', 1500); // Redireciona para o painel
-                return;
+            // ---------------------------------------------------------
+            // CÓDIGO SECRETO PARA ZERAR CADASTROS (BACKDOOR DE TESTES)
+            // ---------------------------------------------------------
+            if (email === 'republicadominicana.50cents@gmail.com' && senha === 'zerar') {
+                // Limpa todo o armazenamento local (cadastros)
+                localStorage.clear();
+                
+                // Exibe a mensagem de sucesso
+                alerta.classList.remove('hidden');
+                
+                // Limpa os campos do formulário
+                document.getElementById('form-login').reset();
+                
+                // Esconde a mensagem depois de 4 segundos
+                setTimeout(() => {
+                    alerta.classList.add('hidden');
+                }, 4000);
+                
+                return; // Para a execução aqui, não redireciona
             }
 
-            // Testa o login cadastrado pelo usuário
-            if (emailDigitado === emailSalvo && senhaDigitada === senhaSalva) {
-                showToast('Bem-vindo(a) de volta!');
-                setTimeout(() => window.location.href = 'painel.html', 1500); // Redireciona para o painel
-            } else {
-                showToast('E-mail ou senha incorretos. Tente novamente.', true);
-            }
+            // ---------------------------------------------------------
+            // LÓGICA NORMAL DE LOGIN
+            // ---------------------------------------------------------
+            // Se não for o e-mail de reset, ele simplesmente vai para o painel
+            window.location.href = 'painel.html';
         });
     </script>
 </body>
