@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro - Educa Jundiaí</title>
+    <title>Cadastro Restrito - Educa Jundiaí</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -28,6 +28,7 @@
     </script>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -35,7 +36,41 @@
 </head>
 <body class="bg-bglight flex items-center justify-center min-h-screen p-4">
 
-    <div class="bg-cardbg p-8 sm:p-10 rounded-2xl shadow-xl w-full max-w-2xl border border-gray-100 my-8">
+    <div id="area-autenticacao" class="bg-cardbg p-8 sm:p-10 rounded-2xl shadow-xl w-full max-w-md border border-gray-100 hidden">
+        <div class="text-center mb-6">
+            <div class="flex justify-center mb-4">
+                <div class="h-16 w-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-3xl">
+                    <i class="ph ph-lock-key"></i>
+                </div>
+            </div>
+            <h2 class="text-2xl font-bold text-darktext">Acesso Restrito</h2>
+            <p class="text-sm text-lighttext mt-2">Apenas operadores da Coordenação/TI podem criar novas contas.</p>
+        </div>
+
+        <form id="form-auth-operador" class="space-y-5">
+            <div>
+                <label for="auth-registro" class="block text-sm font-medium text-darktext mb-1">Registro do Operador (RE)</label>
+                <input type="text" id="auth-registro" required 
+                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition"
+                       placeholder="Digite seu RE">
+            </div>
+            <div>
+                <label for="auth-senha" class="block text-sm font-medium text-darktext mb-1">Senha</label>
+                <input type="password" id="auth-senha" required 
+                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition"
+                       placeholder="••••••••">
+            </div>
+            <button type="submit" class="w-full bg-primary hover:bg-[#083820] text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-200 flex justify-center items-center gap-2">
+                <i class="ph ph-unlock text-lg"></i> Liberar Acesso
+            </button>
+            <div class="text-center mt-4 border-t border-gray-100 pt-4">
+                <a href="index.html" class="text-sm text-primary font-bold hover:underline">Voltar para o Início</a>
+            </div>
+        </form>
+        <p id="msg-erro-auth" class="hidden text-center text-xs text-red-600 mt-4 font-semibold">Credenciais incorretas ou cargo não autorizado.</p>
+    </div>
+
+    <div id="area-cadastro" class="bg-cardbg p-8 sm:p-10 rounded-2xl shadow-xl w-full max-w-2xl border border-gray-100 my-8 hidden">
         
         <div class="text-center mb-6">
             <div class="flex items-center justify-center gap-3 mb-2">
@@ -43,7 +78,7 @@
                 <h1 class="text-3xl font-bold text-primary tracking-wider">50cents</h1>
             </div>
             <h2 class="text-xl font-bold text-darktext">Criar ou Atualizar Conta</h2>
-            <p class="text-sm text-lighttext mt-1">Plataforma Unificada — Liga Jovem 2024</p>
+            <p class="text-sm text-lighttext mt-1">Modo Administrador — Liga Jovem 2024</p>
         </div>
 
         <form id="form-cadastro" class="space-y-5">
@@ -137,8 +172,8 @@
             </div>
 
             <button type="submit" 
-                    class="w-full bg-primary hover:bg-[#083820] text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-200 mt-2">
-                Salvar Cadastro
+                    class="w-full bg-primary hover:bg-[#083820] text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-200 mt-2 flex justify-center items-center gap-2">
+                <i class="ph ph-floppy-disk text-lg"></i> Salvar Cadastro
             </button>
         </form>
 
@@ -147,31 +182,103 @@
             <p id="detalhes-cadastro" class="leading-relaxed"></p>
         </div>
 
-        <div class="mt-6 text-center border-t border-gray-100 pt-4">
-            <p class="text-sm text-lighttext">Deseja entrar no sistema? <a href="index.html" class="text-primary font-bold hover:underline">Ir para o Login</a></p>
-            <p class="text-xs text-gray-400 mt-4">Projeto Educa Jundiaí - Liga Jovem 2024</p>
+        <div class="mt-6 flex justify-between items-center border-t border-gray-100 pt-4">
+            <a href="index.html" class="text-sm text-lighttext hover:text-primary transition flex items-center gap-1">
+                <i class="ph ph-sign-in"></i> Tela de Login
+            </a>
+            <button id="btn-voltar-painel" class="hidden text-sm text-primary font-bold hover:underline flex items-center gap-1">
+                <i class="ph ph-squares-four"></i> Voltar ao Painel
+            </button>
         </div>
     </div>
 
     <script>
+        // Elementos da Interface
+        const areaAuth = document.getElementById('area-autenticacao');
+        const areaCadastro = document.getElementById('area-cadastro');
+        const formAuth = document.getElementById('form-auth-operador');
+        const msgErroAuth = document.getElementById('msg-erro-auth');
+        const btnVoltarPainel = document.getElementById('btn-voltar-painel');
+
+        // ==========================================
+        // LÓGICA DE GATEKEEPER (BLOQUEIO)
+        // ==========================================
+        function checarPermissaoDeAcesso() {
+            const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+            const existeOperador = usuarios.some(u => u.tipoConta === 'operador');
+            
+            // Verifica se o usuário JÁ ESTÁ logado como operador nesta sessão
+            const usuarioLogadoStr = localStorage.getItem('usuarioLogado');
+            let isLogadoComoOperador = false;
+            
+            if (usuarioLogadoStr) {
+                const usuarioLogado = JSON.parse(usuarioLogadoStr);
+                if (usuarioLogado.tipoConta === 'operador') {
+                    isLogadoComoOperador = true;
+                }
+            }
+
+            if (!existeOperador) {
+                // TRAVA DE DEADLOCK: Se o sistema for zerado, precisa permitir o 1º cadastro
+                alert("Aviso do Sistema: Nenhum Operador encontrado no banco de dados. O primeiro acesso foi liberado para configuração inicial.");
+                liberarTelaCadastro();
+                document.getElementById('tipo-conta').value = 'operador'; // Força a aba para Operador
+            } else if (isLogadoComoOperador) {
+                // Se já veio logado pelo painel da coordenação, pula a senha
+                liberarTelaCadastro();
+                btnVoltarPainel.classList.remove('hidden'); // Mostra botão de voltar pro painel
+            } else {
+                // Se não está logado, mostra o cadeado pedindo RE e Senha
+                areaAuth.classList.remove('hidden');
+            }
+        }
+
+        formAuth.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const re = document.getElementById('auth-registro').value.trim();
+            const senha = document.getElementById('auth-senha').value.trim();
+            const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+            
+            const operadorValido = usuarios.find(u => u.registro === re && u.senha === senha && u.tipoConta === 'operador');
+            
+            if (operadorValido) {
+                // Sucesso: credenciais confirmadas
+                msgErroAuth.classList.add('hidden');
+                liberarTelaCadastro();
+            } else {
+                // Falha
+                msgErroAuth.classList.remove('hidden');
+            }
+        });
+
+        function liberarTelaCadastro() {
+            areaAuth.classList.add('hidden');
+            areaCadastro.classList.remove('hidden');
+        }
+
+        // Executa a checagem ao carregar a página
+        checarPermissaoDeAcesso();
+
+        // Botão para voltar ao painel se já estiver logado
+        btnVoltarPainel.addEventListener('click', function() {
+            window.location.href = 'painel-do-operador.html';
+        });
+
+        // ==========================================
+        // LÓGICA DO FORMULÁRIO DE CADASTRO
+        // ==========================================
         const campoSenha = document.getElementById('senha');
         const btnVerSenha = document.getElementById('btn-ver-senha');
         const tipoContaSelect = document.getElementById('tipo-conta');
         const labelRegistro = document.getElementById('label-registro');
 
-        // Mudar o texto do campo de registro dinamicamente baseando-se no cargo
         tipoContaSelect.addEventListener('change', function() {
             const valor = tipoContaSelect.value;
-            if (valor === 'aluno') {
-                labelRegistro.innerText = 'RA (Registro do Aluno)';
-            } else if (valor === 'professor') {
-                labelRegistro.innerText = 'RP (Registro do Professor)';
-            } else if (valor === 'operador') {
-                labelRegistro.innerText = 'RE (Registro do Operador)';
-            }
+            if (valor === 'aluno') labelRegistro.innerText = 'RA (Registro do Aluno)';
+            else if (valor === 'professor') labelRegistro.innerText = 'RP (Registro do Professor)';
+            else if (valor === 'operador') labelRegistro.innerText = 'RE (Registro do Operador)';
         });
 
-        // Lógica do Botão de Ver / Esconder Senha
         btnVerSenha.addEventListener('click', function() {
             if (campoSenha.type === 'password') {
                 campoSenha.type = 'text';
@@ -182,36 +289,24 @@
             }
         });
 
-        // Lógica de Envio e Armazenamento no LocalStorage
         document.getElementById('form-cadastro').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const tipoConta = tipoContaSelect.value;
-            const nome = document.getElementById('nome').value.trim();
-            const sobrenome = document.getElementById('sobrenome').value.trim();
-            const nascimento = document.getElementById('nascimento').value;
-            const registro = document.getElementById('registro').value.trim();
-            const escola = document.getElementById('escola').value.trim();
-            const serie = document.getElementById('serie').value.trim();
-            const turma = document.getElementById('turma').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const senha = document.getElementById('senha').value.trim();
-            const inputFoto = document.getElementById('foto');
-
             const dadosUsuario = {
-                tipoConta: tipoConta,
-                nome: nome,
-                sobrenome: sobrenome,
-                nascimento: nascimento,
-                registro: registro,
-                escola: escola,
-                serie: serie || 'N/A', // Salva N/A se for deixado em branco
-                turma: turma || 'N/A', // Salva N/A se for deixado em branco
-                email: email,
-                senha: senha,
+                tipoConta: tipoContaSelect.value,
+                nome: document.getElementById('nome').value.trim(),
+                sobrenome: document.getElementById('sobrenome').value.trim(),
+                nascimento: document.getElementById('nascimento').value,
+                registro: document.getElementById('registro').value.trim(),
+                escola: document.getElementById('escola').value.trim(),
+                serie: document.getElementById('serie').value.trim() || 'N/A',
+                turma: document.getElementById('turma').value.trim() || 'N/A',
+                email: document.getElementById('email').value.trim(),
+                senha: document.getElementById('senha').value.trim(),
                 foto: null
             };
 
+            const inputFoto = document.getElementById('foto');
             if (inputFoto.files && inputFoto.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -232,15 +327,11 @@
 
         function salvarOuAtualizar(usuario) {
             let usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios')) || [];
-            
             const index = usuariosCadastrados.findIndex(u => u.email === usuario.email);
-            
             let tituloMensagem = "✓ Cadastro Realizado!";
 
             if (index !== -1) {
-                if (!usuario.foto) {
-                    usuario.foto = usuariosCadastrados[index].foto;
-                }
+                if (!usuario.foto) usuario.foto = usuariosCadastrados[index].foto;
                 usuariosCadastrados[index] = usuario;
                 tituloMensagem = "✓ Cadastro Atualizado!";
             } else {
@@ -253,23 +344,13 @@
             const tituloAlerta = document.getElementById('titulo-alerta');
             const detalhes = document.getElementById('detalhes-cadastro');
             
-            const cargoFormatado = usuario.tipoConta.toUpperCase();
-            const dataFormatada = formatarDataBrasileira(usuario.nascimento);
-            
             tituloAlerta.innerText = tituloMensagem;
-            detalhes.innerHTML = `Conta: <strong>${cargoFormatado}</strong> | Nome: <strong>${usuario.nome} ${usuario.sobrenome}</strong><br>ID: <strong>${usuario.registro}</strong> | Nasc: <strong>${dataFormatada}</strong><br>Escola: <strong>${usuario.escola}</strong> | Série: <strong>${usuario.serie}</strong> | Turma: <strong>${usuario.turma}</strong>`;
+            detalhes.innerHTML = `Conta: <strong>${usuario.tipoConta.toUpperCase()}</strong> | Nome: <strong>${usuario.nome} ${usuario.sobrenome}</strong><br>ID: <strong>${usuario.registro}</strong> | Nasc: <strong>${formatarDataBrasileira(usuario.nascimento)}</strong><br>Escola: <strong>${usuario.escola}</strong>`;
             
             alerta.classList.remove('hidden');
-
             document.getElementById('form-cadastro').reset();
-            tipoContaSelect.value = 'aluno';
-            labelRegistro.innerText = 'RA (Registro do Aluno)';
-            campoSenha.type = 'password';
-            btnVerSenha.textContent = 'Ver';
-
-            setTimeout(() => {
-                alerta.classList.add('hidden');
-            }, 8000); // Aumentei o tempo do aviso para 8 segundos para dar tempo de ler tudo
+            
+            setTimeout(() => { alerta.classList.add('hidden'); }, 6000);
         }
     </script>
 </body>
