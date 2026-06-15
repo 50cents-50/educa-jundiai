@@ -48,7 +48,7 @@
                     <i class="ph ph-squares-four text-xl"></i> Visão Geral
                 </button>
                 <button id="menu-ver-cadastros" class="w-full flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition">
-                    <i class="ph ph-users text-xl"></i> Ver Cadastros
+                    <i class="ph ph-users text-xl"></i> Gestão de Contas
                 </button>
                 <button class="w-full flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition">
                     <i class="ph ph-megaphone text-xl"></i> Comunicados Gerais
@@ -98,8 +98,8 @@
                         <i class="ph ph-student"></i>
                     </div>
                     <div>
-                        <p class="text-sm text-lighttext">Total de Alunos</p>
-                        <p class="text-2xl font-bold text-darktext">1.240</p>
+                        <p class="text-sm text-lighttext">Alunos Cadastrados</p>
+                        <p id="total-alunos" class="text-2xl font-bold text-darktext">0</p>
                     </div>
                 </div>
                 <div class="bg-cardbg p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
@@ -108,7 +108,7 @@
                     </div>
                     <div>
                         <p class="text-sm text-lighttext">Corpo Docente</p>
-                        <p class="text-2xl font-bold text-darktext">48</p>
+                        <p id="total-docentes" class="text-2xl font-bold text-darktext">0</p>
                     </div>
                 </div>
                 <div class="bg-cardbg p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
@@ -125,7 +125,7 @@
                         <i class="ph ph-warning"></i>
                     </div>
                     <div>
-                        <p class="text-sm text-lighttext">Ocorrências</p>
+                        <p class="text-sm text-lighttext">Ocorrências Ativas</p>
                         <p class="text-2xl font-bold text-darktext">5</p>
                     </div>
                 </div>
@@ -136,7 +136,11 @@
                 <div class="bg-cardbg rounded-2xl shadow-sm border border-gray-100 p-6">
                     <h3 class="text-lg font-bold text-darktext mb-4">Ações Rápidas</h3>
                     <div class="grid grid-cols-2 gap-4">
-                        <button id="btn-acao-cadastros" class="p-4 border border-gray-200 rounded-xl hover:bg-green-50 hover:border-primary transition group flex flex-col items-center justify-center text-center gap-2">
+                        <button id="btn-acao-novo-cadastro" class="p-4 border border-gray-200 rounded-xl hover:bg-green-50 hover:border-primary transition group flex flex-col items-center justify-center text-center gap-2">
+                            <i class="ph ph-user-plus text-3xl text-lighttext group-hover:text-primary"></i>
+                            <span class="text-sm font-semibold text-darktext group-hover:text-primary">Novo Cadastro</span>
+                        </button>
+                        <button id="btn-acao-ver-cadastros" class="p-4 border border-gray-200 rounded-xl hover:bg-green-50 hover:border-primary transition group flex flex-col items-center justify-center text-center gap-2">
                             <i class="ph ph-users text-3xl text-lighttext group-hover:text-primary"></i>
                             <span class="text-sm font-semibold text-darktext group-hover:text-primary">Ver Cadastros</span>
                         </button>
@@ -147,10 +151,6 @@
                         <button class="p-4 border border-gray-200 rounded-xl hover:bg-green-50 hover:border-primary transition group flex flex-col items-center justify-center text-center gap-2">
                             <i class="ph ph-calendar-plus text-3xl text-lighttext group-hover:text-primary"></i>
                             <span class="text-sm font-semibold text-darktext group-hover:text-primary">Agendar Evento</span>
-                        </button>
-                        <button class="p-4 border border-gray-200 rounded-xl hover:bg-green-50 hover:border-primary transition group flex flex-col items-center justify-center text-center gap-2">
-                            <i class="ph ph-printer text-3xl text-lighttext group-hover:text-primary"></i>
-                            <span class="text-sm font-semibold text-darktext group-hover:text-primary">Gerar Relatórios</span>
                         </button>
                     </div>
                 </div>
@@ -184,12 +184,21 @@
         <div id="sessao-cadastros" class="p-8 hidden">
             <div class="flex justify-between items-center mb-6">
                 <div>
-                    <h3 class="text-2xl font-bold text-darktext">Banco de Usuários</h3>
-                    <p class="text-sm text-lighttext mt-1">Gerencie os alunos, professores e operadores registrados no sistema.</p>
+                    <h3 class="text-2xl font-bold text-darktext">Gestão de Contas da Escola</h3>
+                    <p class="text-sm text-lighttext mt-1">Visualizando e gerenciando usuários restritos à sua unidade escolar.</p>
                 </div>
-                <button id="btn-voltar-dashboard" class="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-darktext rounded-lg font-medium transition">
-                    <i class="ph ph-arrow-left"></i> Voltar ao Painel
-                </button>
+                <div class="flex gap-3">
+                    <a href="cadastro.html" class="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-[#083820] text-white rounded-lg font-medium transition shadow-md">
+                        <i class="ph ph-plus-circle"></i> Adicionar Conta
+                    </a>
+                    <button id="btn-voltar-dashboard" class="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-darktext rounded-lg font-medium transition">
+                        <i class="ph ph-arrow-left"></i> Voltar ao Painel
+                    </button>
+                </div>
+            </div>
+
+            <div id="alerta-exclusao" class="hidden mb-4 p-3 bg-red-100 text-red-700 text-sm font-bold text-center rounded-lg border border-red-200 transition-all">
+                Usuário excluído com sucesso.
             </div>
 
             <div class="bg-cardbg rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
@@ -200,8 +209,8 @@
                                 <th class="px-6 py-4 font-bold">Nome Completo</th>
                                 <th class="px-6 py-4 font-bold">Cargo</th>
                                 <th class="px-6 py-4 font-bold">Registro (ID)</th>
-                                <th class="px-6 py-4 font-bold">Escola</th>
-                                <th class="px-6 py-4 font-bold">E-mail</th>
+                                <th class="px-6 py-4 font-bold">Série/Turma</th>
+                                <th class="px-6 py-4 font-bold text-center">Ações</th>
                             </tr>
                         </thead>
                         <tbody id="tabela-cadastros-body" class="divide-y divide-gray-100">
@@ -216,11 +225,12 @@
     <script>
         // 1. AUTENTICAÇÃO E PERFIL
         const usuarioAtualStr = localStorage.getItem('usuarioLogado');
+        let usuarioAtual;
         
         if (!usuarioAtualStr) {
             window.location.href = 'index.html';
         } else {
-            const usuarioAtual = JSON.parse(usuarioAtualStr);
+            usuarioAtual = JSON.parse(usuarioAtualStr);
 
             if (usuarioAtual.tipoConta !== 'operador') {
                 alert('Acesso negado. Esta área é restrita à Coordenação.');
@@ -240,22 +250,45 @@
                 imgTag.classList.remove('hidden');
                 iconeTag.classList.add('hidden');
             }
+            
+            // Inicia atualizando os números na tela
+            atualizarMetricasDinamicas();
         }
 
-        // 2. NAVEGAÇÃO ENTRE ABAS (DASHBOARD E CADASTROS)
+        // 2. ATUALIZAR MÉTRICAS (Números Reais)
+        function atualizarMetricasDinamicas() {
+            const todosUsuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+            
+            // Filtra ignorando letras maiúsculas e minúsculas
+            const escolaAtualLowerCase = usuarioAtual.escola.trim().toLowerCase();
+            const usuariosDaEscola = todosUsuarios.filter(u => u.escola.trim().toLowerCase() === escolaAtualLowerCase);
+            
+            const totalAlunos = usuariosDaEscola.filter(u => u.tipoConta === 'aluno').length;
+            const totalDocentes = usuariosDaEscola.filter(u => u.tipoConta === 'professor').length;
+            
+            document.getElementById('total-alunos').innerText = totalAlunos;
+            document.getElementById('total-docentes').innerText = totalDocentes;
+        }
+
+        // 3. NAVEGAÇÃO ENTRE ABAS
         const sessaoDashboard = document.getElementById('sessao-dashboard');
         const sessaoCadastros = document.getElementById('sessao-cadastros');
         
         const btnMenuInicio = document.getElementById('menu-inicio');
         const btnMenuCadastros = document.getElementById('menu-ver-cadastros');
-        const btnAcaoCadastros = document.getElementById('btn-acao-cadastros');
+        const btnAcaoVerCadastros = document.getElementById('btn-acao-ver-cadastros');
+        const btnAcaoNovoCadastro = document.getElementById('btn-acao-novo-cadastro');
         const btnVoltar = document.getElementById('btn-voltar-dashboard');
+
+        // Redirecionamento direto do botão "Novo Cadastro"
+        btnAcaoNovoCadastro.addEventListener('click', function() {
+            window.location.href = 'cadastro.html';
+        });
 
         function mostrarCadastros() {
             sessaoDashboard.classList.add('hidden');
             sessaoCadastros.classList.remove('hidden');
             
-            // Estilizar o menu lateral
             btnMenuInicio.className = "w-full flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition";
             btnMenuCadastros.className = "w-full flex items-center gap-3 px-4 py-3 bg-primary text-white rounded-lg font-medium transition shadow-sm";
             
@@ -266,52 +299,99 @@
             sessaoCadastros.classList.add('hidden');
             sessaoDashboard.classList.remove('hidden');
             
-            // Estilizar o menu lateral
             btnMenuCadastros.className = "w-full flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition";
             btnMenuInicio.className = "w-full flex items-center gap-3 px-4 py-3 bg-primary text-white rounded-lg font-medium transition shadow-sm";
+            
+            atualizarMetricasDinamicas();
         }
 
         btnMenuCadastros.addEventListener('click', mostrarCadastros);
-        btnAcaoCadastros.addEventListener('click', mostrarCadastros);
+        btnAcaoVerCadastros.addEventListener('click', mostrarCadastros);
         btnMenuInicio.addEventListener('click', mostrarDashboard);
         btnVoltar.addEventListener('click', mostrarDashboard);
 
-        // 3. PREENCHIMENTO DA TABELA DE USUÁRIOS
+        // 4. PREENCHIMENTO DA TABELA E EXCLUSÃO (Somente da mesma escola)
         function carregarTabelaCadastros() {
-            const usuariosSalvos = JSON.parse(localStorage.getItem('usuarios')) || [];
+            const todosUsuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
             const tbody = document.getElementById('tabela-cadastros-body');
-            tbody.innerHTML = ''; // Limpa a tabela antes de preencher
+            tbody.innerHTML = ''; 
 
-            if (usuariosSalvos.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-lighttext">Nenhum usuário encontrado no sistema.</td></tr>`;
+            const escolaAtualLowerCase = usuarioAtual.escola.trim().toLowerCase();
+            const usuariosDaEscola = todosUsuarios.filter(u => u.escola.trim().toLowerCase() === escolaAtualLowerCase);
+
+            if (usuariosDaEscola.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-lighttext">Nenhum usuário encontrado na sua escola. <a href="cadastro.html" class="text-primary font-bold hover:underline">Cadastrar o primeiro.</a></td></tr>`;
                 return;
             }
 
-            usuariosSalvos.forEach(u => {
-                // Definir cor e estilo da tag (badge) baseada no cargo
+            usuariosDaEscola.forEach(u => {
                 let corBadge = '';
                 if (u.tipoConta === 'aluno') corBadge = 'bg-blue-100 text-blue-700';
                 else if (u.tipoConta === 'professor') corBadge = 'bg-purple-100 text-purple-700';
                 else if (u.tipoConta === 'operador') corBadge = 'bg-green-100 text-green-700';
+
+                // Tratar formatação de série e turma
+                let infoSerieTurma = 'N/A';
+                if(u.serie !== 'N/A' || u.turma !== 'N/A') {
+                    infoSerieTurma = `${u.serie === 'N/A' ? '' : u.serie} ${u.turma === 'N/A' ? '' : u.turma}`.trim();
+                }
 
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-gray-50 transition';
                 tr.innerHTML = `
                     <td class="px-6 py-4">
                         <p class="text-sm font-bold text-darktext">${u.nome} ${u.sobrenome}</p>
+                        <p class="text-xs text-lighttext">${u.email}</p>
                     </td>
                     <td class="px-6 py-4">
                         <span class="px-3 py-1 rounded-full text-xs font-bold uppercase ${corBadge}">${u.tipoConta}</span>
                     </td>
                     <td class="px-6 py-4 text-sm text-lighttext font-medium">${u.registro}</td>
-                    <td class="px-6 py-4 text-sm text-lighttext">${u.escola}</td>
-                    <td class="px-6 py-4 text-sm text-lighttext">${u.email}</td>
+                    <td class="px-6 py-4 text-sm text-lighttext">${infoSerieTurma}</td>
+                    <td class="px-6 py-4 text-center">
+                        <button onclick="excluirUsuario('${u.email}')" class="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition" title="Excluir Conta">
+                            <i class="ph ph-trash text-lg"></i>
+                        </button>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        // 4. LOGOUT
+        // Função global para excluir acionada pelo botão da lixeira
+        window.excluirUsuario = function(emailParaExcluir) {
+            // Trava de segurança
+            if (emailParaExcluir === usuarioAtual.email) {
+                alert("Ação negada: Você não pode excluir a sua própria conta logada.");
+                return;
+            }
+
+            // Confirmação dupla
+            const confirmacao = confirm(`Tem certeza que deseja excluir permanentemente o cadastro de "${emailParaExcluir}"?`);
+            
+            if (confirmacao) {
+                let todosUsuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+                
+                // Filtra removendo o email específico (independente da escola)
+                todosUsuarios = todosUsuarios.filter(u => u.email !== emailParaExcluir);
+                
+                // Salva de volta no banco
+                localStorage.setItem('usuarios', JSON.stringify(todosUsuarios));
+                
+                // Exibe alerta de sucesso temporário
+                const alertaExclusao = document.getElementById('alerta-exclusao');
+                alertaExclusao.classList.remove('hidden');
+                setTimeout(() => {
+                    alertaExclusao.classList.add('hidden');
+                }, 3000);
+
+                // Recarrega as views
+                carregarTabelaCadastros();
+                atualizarMetricasDinamicas();
+            }
+        };
+
+        // 5. LOGOUT
         document.getElementById('btn-sair').addEventListener('click', function() {
             localStorage.removeItem('usuarioLogado');
             window.location.href = 'index.html';
