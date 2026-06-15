@@ -35,7 +35,7 @@
 </head>
 <body class="bg-bglight flex items-center justify-center min-h-screen p-4">
 
-    <div class="bg-cardbg p-8 sm:p-10 rounded-2xl shadow-xl w-full max-w-lg border border-gray-100 my-8">
+    <div class="bg-cardbg p-8 sm:p-10 rounded-2xl shadow-xl w-full max-w-2xl border border-gray-100 my-8">
         
         <div class="text-center mb-6">
             <div class="flex items-center justify-center gap-3 mb-2">
@@ -46,7 +46,7 @@
             <p class="text-sm text-lighttext mt-1">Plataforma Unificada — Liga Jovem 2024</p>
         </div>
 
-        <form id="form-cadastro" class="space-y-4">
+        <form id="form-cadastro" class="space-y-5">
             
             <div>
                 <label for="tipo-conta" class="block text-sm font-medium text-darktext mb-1">Tipo de Conta (Cargo)</label>
@@ -75,16 +75,36 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
+                    <label for="nascimento" class="block text-sm font-medium text-darktext mb-1">Data de Nascimento</label>
+                    <input type="date" id="nascimento" required 
+                           class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition text-darktext">
+                </div>
+                <div>
                     <label id="label-registro" for="registro" class="block text-sm font-medium text-darktext mb-1">RA (Registro do Aluno)</label>
                     <input type="text" id="registro" required 
                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition"
                            placeholder="Ex: 123456789">
                 </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                     <label for="escola" class="block text-sm font-medium text-darktext mb-1">Escola</label>
                     <input type="text" id="escola" required 
                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition"
                            placeholder="Ex: Ranieri Masili">
+                </div>
+                <div>
+                    <label for="serie" class="block text-sm font-medium text-darktext mb-1">Série <span class="text-xs text-gray-400 font-normal">(Opcional)</span></label>
+                    <input type="text" id="serie" 
+                           class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition"
+                           placeholder="Ex: 9º Ano">
+                </div>
+                <div>
+                    <label for="turma" class="block text-sm font-medium text-darktext mb-1">Turma <span class="text-xs text-gray-400 font-normal">(Opcional)</span></label>
+                    <input type="text" id="turma" 
+                           class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition"
+                           placeholder="Ex: B">
                 </div>
             </div>
 
@@ -93,7 +113,7 @@
                 <input type="email" id="email" required 
                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition"
                        placeholder="exemplo@escola.com">
-                <p class="text-xs text-gray-400 mt-1">Se o e-mail já existir, as informações do perfil serão substituídas.</p>
+                <p class="text-xs text-gray-400 mt-1">Se o e-mail já existir, as informações do perfil serão atualizadas.</p>
             </div>
 
             <div>
@@ -124,7 +144,7 @@
 
         <div id="alerta-cadastro" class="hidden mt-4 p-4 bg-green-100 text-green-800 text-xs font-medium rounded-lg border border-green-200 space-y-1 transition-all">
             <p id="titulo-alerta" class="font-bold text-sm text-green-900">✓ Cadastro Realizado!</p>
-            <p id="detalhes-cadastro"></p>
+            <p id="detalhes-cadastro" class="leading-relaxed"></p>
         </div>
 
         <div class="mt-6 text-center border-t border-gray-100 pt-4">
@@ -169,8 +189,11 @@
             const tipoConta = tipoContaSelect.value;
             const nome = document.getElementById('nome').value.trim();
             const sobrenome = document.getElementById('sobrenome').value.trim();
+            const nascimento = document.getElementById('nascimento').value;
             const registro = document.getElementById('registro').value.trim();
-            const school = document.getElementById('escola').value.trim();
+            const escola = document.getElementById('escola').value.trim();
+            const serie = document.getElementById('serie').value.trim();
+            const turma = document.getElementById('turma').value.trim();
             const email = document.getElementById('email').value.trim();
             const senha = document.getElementById('senha').value.trim();
             const inputFoto = document.getElementById('foto');
@@ -179,8 +202,11 @@
                 tipoConta: tipoConta,
                 nome: nome,
                 sobrenome: sobrenome,
+                nascimento: nascimento,
                 registro: registro,
-                escola: school,
+                escola: escola,
+                serie: serie || 'N/A', // Salva N/A se for deixado em branco
+                turma: turma || 'N/A', // Salva N/A se for deixado em branco
                 email: email,
                 senha: senha,
                 foto: null
@@ -197,6 +223,12 @@
                 salvarOuAtualizar(dadosUsuario);
             }
         });
+
+        function formatarDataBrasileira(dataISO) {
+            if (!dataISO) return '';
+            const partes = dataISO.split('-');
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
 
         function salvarOuAtualizar(usuario) {
             let usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios')) || [];
@@ -221,14 +253,14 @@
             const tituloAlerta = document.getElementById('titulo-alerta');
             const detalhes = document.getElementById('detalhes-cadastro');
             
-            // Exibe as informações salvas e mostra o cargo em maiúsculo para dar destaque
             const cargoFormatado = usuario.tipoConta.toUpperCase();
+            const dataFormatada = formatarDataBrasileira(usuario.nascimento);
+            
             tituloAlerta.innerText = tituloMensagem;
-            detalhes.innerHTML = `Conta: <strong>${cargoFormatado}</strong><br>Nome: <strong>${usuario.nome} ${usuario.sobrenome}</strong><br>ID: <strong>${usuario.registro}</strong> | Escola: <strong>${usuario.escola}</strong>`;
+            detalhes.innerHTML = `Conta: <strong>${cargoFormatado}</strong> | Nome: <strong>${usuario.nome} ${usuario.sobrenome}</strong><br>ID: <strong>${usuario.registro}</strong> | Nasc: <strong>${dataFormatada}</strong><br>Escola: <strong>${usuario.escola}</strong> | Série: <strong>${usuario.serie}</strong> | Turma: <strong>${usuario.turma}</strong>`;
             
             alerta.classList.remove('hidden');
 
-            // Limpa o formulário mantendo a seleção padrão do cargo
             document.getElementById('form-cadastro').reset();
             tipoContaSelect.value = 'aluno';
             labelRegistro.innerText = 'RA (Registro do Aluno)';
@@ -237,7 +269,7 @@
 
             setTimeout(() => {
                 alerta.classList.add('hidden');
-            }, 6000);
+            }, 8000); // Aumentei o tempo do aviso para 8 segundos para dar tempo de ler tudo
         }
     </script>
 </body>
