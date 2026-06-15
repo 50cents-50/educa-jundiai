@@ -44,21 +44,18 @@
             </div>
 
             <nav class="p-4 space-y-2">
-                <a href="#" class="flex items-center gap-3 px-4 py-3 bg-primary text-white rounded-lg font-medium transition shadow-sm">
+                <button id="menu-inicio" class="w-full flex items-center gap-3 px-4 py-3 bg-primary text-white rounded-lg font-medium transition shadow-sm">
                     <i class="ph ph-squares-four text-xl"></i> Visão Geral
-                </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition">
-                    <i class="ph ph-student text-xl"></i> Gestão de Alunos
-                </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition">
-                    <i class="ph ph-chalkboard-teacher text-xl"></i> Corpo Docente
-                </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition">
+                </button>
+                <button id="menu-ver-cadastros" class="w-full flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition">
+                    <i class="ph ph-users text-xl"></i> Ver Cadastros
+                </button>
+                <button class="w-full flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition">
                     <i class="ph ph-megaphone text-xl"></i> Comunicados Gerais
-                </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition">
+                </button>
+                <button class="w-full flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition">
                     <i class="ph ph-chart-bar text-xl"></i> Relatórios da Escola
-                </a>
+                </button>
             </nav>
         </div>
 
@@ -72,9 +69,9 @@
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col h-full overflow-y-auto">
+    <main class="flex-1 flex flex-col h-full overflow-y-auto relative">
         
-        <header class="bg-cardbg h-20 px-8 flex items-center justify-between border-b border-gray-100 shadow-sm">
+        <header class="bg-cardbg h-20 px-8 flex items-center justify-between border-b border-gray-100 shadow-sm shrink-0">
             <div>
                 <h2 class="text-xl font-bold text-darktext" id="saudacao">Olá, Coordenação!</h2>
                 <p class="text-sm text-lighttext" id="info-escola">Portal Administrativo.</p>
@@ -92,7 +89,7 @@
             </div>
         </header>
 
-        <div class="p-8">
+        <div id="sessao-dashboard" class="p-8 block">
             <h3 class="text-lg font-bold text-darktext mb-6">Métricas da Instituição</h3>
             
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -128,7 +125,7 @@
                         <i class="ph ph-warning"></i>
                     </div>
                     <div>
-                        <p class="text-sm text-lighttext">Ocorrências Ativas</p>
+                        <p class="text-sm text-lighttext">Ocorrências</p>
                         <p class="text-2xl font-bold text-darktext">5</p>
                     </div>
                 </div>
@@ -139,9 +136,9 @@
                 <div class="bg-cardbg rounded-2xl shadow-sm border border-gray-100 p-6">
                     <h3 class="text-lg font-bold text-darktext mb-4">Ações Rápidas</h3>
                     <div class="grid grid-cols-2 gap-4">
-                        <button class="p-4 border border-gray-200 rounded-xl hover:bg-green-50 hover:border-primary transition group flex flex-col items-center justify-center text-center gap-2">
-                            <i class="ph ph-user-plus text-3xl text-lighttext group-hover:text-primary"></i>
-                            <span class="text-sm font-semibold text-darktext group-hover:text-primary">Novo Cadastro</span>
+                        <button id="btn-acao-cadastros" class="p-4 border border-gray-200 rounded-xl hover:bg-green-50 hover:border-primary transition group flex flex-col items-center justify-center text-center gap-2">
+                            <i class="ph ph-users text-3xl text-lighttext group-hover:text-primary"></i>
+                            <span class="text-sm font-semibold text-darktext group-hover:text-primary">Ver Cadastros</span>
                         </button>
                         <button class="p-4 border border-gray-200 rounded-xl hover:bg-green-50 hover:border-primary transition group flex flex-col items-center justify-center text-center gap-2">
                             <i class="ph ph-paper-plane-tilt text-3xl text-lighttext group-hover:text-primary"></i>
@@ -168,7 +165,7 @@
                             <i class="ph ph-warning-circle text-red-600 text-xl mt-0.5"></i>
                             <div>
                                 <p class="text-sm font-bold text-red-800">Falta de Professor</p>
-                                <p class="text-xs text-red-700 mt-1">Prof. Carlos (Matemática) comunicou ausência médica para as aulas do período da manhã.</p>
+                                <p class="text-xs text-red-700 mt-1">Prof. Carlos (Matemática) comunicou ausência médica para as aulas da manhã.</p>
                             </div>
                         </div>
                         <div class="p-4 bg-bglight rounded-lg border border-gray-200 flex items-start gap-3">
@@ -183,10 +180,41 @@
 
             </div>
         </div>
+
+        <div id="sessao-cadastros" class="p-8 hidden">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 class="text-2xl font-bold text-darktext">Banco de Usuários</h3>
+                    <p class="text-sm text-lighttext mt-1">Gerencie os alunos, professores e operadores registrados no sistema.</p>
+                </div>
+                <button id="btn-voltar-dashboard" class="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-darktext rounded-lg font-medium transition">
+                    <i class="ph ph-arrow-left"></i> Voltar ao Painel
+                </button>
+            </div>
+
+            <div class="bg-cardbg rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-bglight text-darktext text-sm border-b border-gray-200">
+                                <th class="px-6 py-4 font-bold">Nome Completo</th>
+                                <th class="px-6 py-4 font-bold">Cargo</th>
+                                <th class="px-6 py-4 font-bold">Registro (ID)</th>
+                                <th class="px-6 py-4 font-bold">Escola</th>
+                                <th class="px-6 py-4 font-bold">E-mail</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabela-cadastros-body" class="divide-y divide-gray-100">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <script>
-        // 1. Verifica se tem alguém logado
+        // 1. AUTENTICAÇÃO E PERFIL
         const usuarioAtualStr = localStorage.getItem('usuarioLogado');
         
         if (!usuarioAtualStr) {
@@ -194,31 +222,96 @@
         } else {
             const usuarioAtual = JSON.parse(usuarioAtualStr);
 
-            // Proteção de Rota: Se não for operador, chuta para o login
             if (usuarioAtual.tipoConta !== 'operador') {
                 alert('Acesso negado. Esta área é restrita à Coordenação.');
                 localStorage.removeItem('usuarioLogado');
                 window.location.href = 'index.html';
             }
 
-            // 2. Atualiza a tela com as informações da Coordenação
             document.getElementById('saudacao').innerText = `Olá, Coordenador(a) ${usuarioAtual.nome}!`;
             document.getElementById('nome-perfil').innerText = `${usuarioAtual.nome} ${usuarioAtual.sobrenome}`;
             document.getElementById('re-perfil').innerText = `RE: ${usuarioAtual.registro}`;
             document.getElementById('info-escola').innerText = `Coordenação - ${usuarioAtual.escola}`;
 
-            // 3. Atualiza a foto de perfil
             if (usuarioAtual.foto) {
                 const imgTag = document.getElementById('foto-perfil');
                 const iconeTag = document.getElementById('icone-perfil');
-                
                 imgTag.src = usuarioAtual.foto;
                 imgTag.classList.remove('hidden');
                 iconeTag.classList.add('hidden');
             }
         }
 
-        // 4. Lógica do Botão de Sair
+        // 2. NAVEGAÇÃO ENTRE ABAS (DASHBOARD E CADASTROS)
+        const sessaoDashboard = document.getElementById('sessao-dashboard');
+        const sessaoCadastros = document.getElementById('sessao-cadastros');
+        
+        const btnMenuInicio = document.getElementById('menu-inicio');
+        const btnMenuCadastros = document.getElementById('menu-ver-cadastros');
+        const btnAcaoCadastros = document.getElementById('btn-acao-cadastros');
+        const btnVoltar = document.getElementById('btn-voltar-dashboard');
+
+        function mostrarCadastros() {
+            sessaoDashboard.classList.add('hidden');
+            sessaoCadastros.classList.remove('hidden');
+            
+            // Estilizar o menu lateral
+            btnMenuInicio.className = "w-full flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition";
+            btnMenuCadastros.className = "w-full flex items-center gap-3 px-4 py-3 bg-primary text-white rounded-lg font-medium transition shadow-sm";
+            
+            carregarTabelaCadastros();
+        }
+
+        function mostrarDashboard() {
+            sessaoCadastros.classList.add('hidden');
+            sessaoDashboard.classList.remove('hidden');
+            
+            // Estilizar o menu lateral
+            btnMenuCadastros.className = "w-full flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition";
+            btnMenuInicio.className = "w-full flex items-center gap-3 px-4 py-3 bg-primary text-white rounded-lg font-medium transition shadow-sm";
+        }
+
+        btnMenuCadastros.addEventListener('click', mostrarCadastros);
+        btnAcaoCadastros.addEventListener('click', mostrarCadastros);
+        btnMenuInicio.addEventListener('click', mostrarDashboard);
+        btnVoltar.addEventListener('click', mostrarDashboard);
+
+        // 3. PREENCHIMENTO DA TABELA DE USUÁRIOS
+        function carregarTabelaCadastros() {
+            const usuariosSalvos = JSON.parse(localStorage.getItem('usuarios')) || [];
+            const tbody = document.getElementById('tabela-cadastros-body');
+            tbody.innerHTML = ''; // Limpa a tabela antes de preencher
+
+            if (usuariosSalvos.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-lighttext">Nenhum usuário encontrado no sistema.</td></tr>`;
+                return;
+            }
+
+            usuariosSalvos.forEach(u => {
+                // Definir cor e estilo da tag (badge) baseada no cargo
+                let corBadge = '';
+                if (u.tipoConta === 'aluno') corBadge = 'bg-blue-100 text-blue-700';
+                else if (u.tipoConta === 'professor') corBadge = 'bg-purple-100 text-purple-700';
+                else if (u.tipoConta === 'operador') corBadge = 'bg-green-100 text-green-700';
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-gray-50 transition';
+                tr.innerHTML = `
+                    <td class="px-6 py-4">
+                        <p class="text-sm font-bold text-darktext">${u.nome} ${u.sobrenome}</p>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold uppercase ${corBadge}">${u.tipoConta}</span>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-lighttext font-medium">${u.registro}</td>
+                    <td class="px-6 py-4 text-sm text-lighttext">${u.escola}</td>
+                    <td class="px-6 py-4 text-sm text-lighttext">${u.email}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 4. LOGOUT
         document.getElementById('btn-sair').addEventListener('click', function() {
             localStorage.removeItem('usuarioLogado');
             window.location.href = 'index.html';
