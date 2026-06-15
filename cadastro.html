@@ -43,11 +43,21 @@
                 <h1 class="text-3xl font-bold text-primary tracking-wider">50cents</h1>
             </div>
             <h2 class="text-xl font-bold text-darktext">Criar ou Atualizar Conta</h2>
-            <p class="text-sm text-lighttext mt-1">Rede Escolar — Liga Jovem 2024</p>
+            <p class="text-sm text-lighttext mt-1">Plataforma Unificada — Liga Jovem 2024</p>
         </div>
 
         <form id="form-cadastro" class="space-y-4">
             
+            <div>
+                <label for="tipo-conta" class="block text-sm font-medium text-darktext mb-1">Tipo de Conta (Cargo)</label>
+                <select id="tipo-conta" required 
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition bg-white cursor-pointer font-medium text-darktext">
+                    <option value="aluno" selected>Aluno</option>
+                    <option value="professor">Professor</option>
+                    <option value="operador">Operador (Coordenação/TI)</option>
+                </select>
+            </div>
+
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label for="nome" class="block text-sm font-medium text-darktext mb-1">Primeiro Nome</label>
@@ -65,8 +75,8 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                    <label for="ra" class="block text-sm font-medium text-darktext mb-1">RA (Registro do Aluno)</label>
-                    <input type="text" id="ra" required 
+                    <label id="label-registro" for="registro" class="block text-sm font-medium text-darktext mb-1">RA (Registro do Aluno)</label>
+                    <input type="text" id="registro" required 
                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition"
                            placeholder="Ex: 123456789">
                 </div>
@@ -83,7 +93,7 @@
                 <input type="email" id="email" required 
                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition"
                        placeholder="exemplo@escola.com">
-                <p class="text-xs text-gray-400 mt-1">Se o e-mail já existir, as informações serão atualizadas.</p>
+                <p class="text-xs text-gray-400 mt-1">Se o e-mail já existir, as informações do perfil serão substituídas.</p>
             </div>
 
             <div>
@@ -124,10 +134,24 @@
     </div>
 
     <script>
-        // Lógica do Botão de Ver / Esconder Senha
         const campoSenha = document.getElementById('senha');
         const btnVerSenha = document.getElementById('btn-ver-senha');
+        const tipoContaSelect = document.getElementById('tipo-conta');
+        const labelRegistro = document.getElementById('label-registro');
 
+        // Mudar o texto do campo de registro dinamicamente baseando-se no cargo
+        tipoContaSelect.addEventListener('change', function() {
+            const valor = tipoContaSelect.value;
+            if (valor === 'aluno') {
+                labelRegistro.innerText = 'RA (Registro do Aluno)';
+            } else if (valor === 'professor') {
+                labelRegistro.innerText = 'RP (Registro do Professor)';
+            } else if (valor === 'operador') {
+                labelRegistro.innerText = 'RE (Registro do Operador)';
+            }
+        });
+
+        // Lógica do Botão de Ver / Esconder Senha
         btnVerSenha.addEventListener('click', function() {
             if (campoSenha.type === 'password') {
                 campoSenha.type = 'text';
@@ -142,25 +166,26 @@
         document.getElementById('form-cadastro').addEventListener('submit', function(e) {
             e.preventDefault();
 
+            const tipoConta = tipoContaSelect.value;
             const nome = document.getElementById('nome').value.trim();
             const sobrenome = document.getElementById('sobrenome').value.trim();
-            const ra = document.getElementById('ra').value.trim();
-            const escola = document.getElementById('escola').value.trim();
+            const registro = document.getElementById('registro').value.trim();
+            const school = document.getElementById('escola').value.trim();
             const email = document.getElementById('email').value.trim();
             const senha = document.getElementById('senha').value.trim();
             const inputFoto = document.getElementById('foto');
 
             const dadosUsuario = {
+                tipoConta: tipoConta,
                 nome: nome,
                 sobrenome: sobrenome,
-                ra: ra,
-                escola: escola,
+                registro: registro,
+                escola: school,
                 email: email,
                 senha: senha,
                 foto: null
             };
 
-            // Se houver uma foto nova, converte e salva. Se não, segue com foto nula para a função avaliar.
             if (inputFoto.files && inputFoto.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -176,46 +201,40 @@
         function salvarOuAtualizar(usuario) {
             let usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios')) || [];
             
-            // Verifica se o e-mail já existe na base de dados
             const index = usuariosCadastrados.findIndex(u => u.email === usuario.email);
             
             let tituloMensagem = "✓ Cadastro Realizado!";
 
             if (index !== -1) {
-                // SE O E-MAIL JÁ EXISTIR: Modo Atualização
-                
-                // Mantém a foto antiga se uma foto nova não foi enviada
                 if (!usuario.foto) {
                     usuario.foto = usuariosCadastrados[index].foto;
                 }
-                
-                // Substitui os dados antigos pelos novos
                 usuariosCadastrados[index] = usuario;
                 tituloMensagem = "✓ Cadastro Atualizado!";
             } else {
-                // SE O E-MAIL FOR NOVO: Modo Inserção
                 usuariosCadastrados.push(usuario);
             }
 
-            // Salva de volta no navegador
             localStorage.setItem('usuarios', JSON.stringify(usuariosCadastrados));
 
-            // Exibe a notificação com o título correto (Realizado vs Atualizado)
             const alerta = document.getElementById('alerta-cadastro');
             const tituloAlerta = document.getElementById('titulo-alerta');
             const detalhes = document.getElementById('detalhes-cadastro');
             
+            // Exibe as informações salvas e mostra o cargo em maiúsculo para dar destaque
+            const cargoFormatado = usuario.tipoConta.toUpperCase();
             tituloAlerta.innerText = tituloMensagem;
-            detalhes.innerHTML = `Aluno: <strong>${usuario.nome} ${usuario.sobrenome}</strong><br>RA: <strong>${usuario.ra}</strong> | Escola: <strong>${usuario.escola}</strong>`;
+            detalhes.innerHTML = `Conta: <strong>${cargoFormatado}</strong><br>Nome: <strong>${usuario.nome} ${usuario.sobrenome}</strong><br>ID: <strong>${usuario.registro}</strong> | Escola: <strong>${usuario.escola}</strong>`;
             
             alerta.classList.remove('hidden');
 
-            // Limpa o formulário
+            // Limpa o formulário mantendo a seleção padrão do cargo
             document.getElementById('form-cadastro').reset();
+            tipoContaSelect.value = 'aluno';
+            labelRegistro.innerText = 'RA (Registro do Aluno)';
             campoSenha.type = 'password';
             btnVerSenha.textContent = 'Ver';
 
-            // Esconde o aviso depois de 6 segundos
             setTimeout(() => {
                 alerta.classList.add('hidden');
             }, 6000);
