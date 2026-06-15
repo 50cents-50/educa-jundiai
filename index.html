@@ -33,9 +33,9 @@
         body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="bg-bglight flex items-center justify-center h-screen">
+<body class="bg-bglight flex items-center justify-center h-screen p-4">
 
-    <div class="bg-cardbg p-10 rounded-2xl shadow-xl w-full max-w-md border border-gray-100">
+    <div class="bg-cardbg p-8 sm:p-10 rounded-2xl shadow-xl w-full max-w-md border border-gray-100">
         
         <div class="text-center mb-8">
             <div class="flex items-center justify-center gap-3 mb-4">
@@ -43,15 +43,16 @@
                 <h1 class="text-3xl font-bold text-primary tracking-wider">50cents</h1>
             </div>
             <h2 class="text-xl font-bold text-darktext">Acesso ao Sistema</h2>
-            <p class="text-sm text-lighttext mt-2">E.M.E.B. Deputado Ranieri Masili</p>
+            <p class="text-sm text-lighttext mt-2">Plataforma Unificada</p>
         </div>
 
         <form id="form-login" class="space-y-6">
+            
             <div>
-                <label for="email" class="block text-sm font-medium text-darktext mb-1">E-mail</label>
-                <input type="email" id="email" required 
+                <label for="identificador" class="block text-sm font-medium text-darktext mb-1">E-mail ou Registro</label>
+                <input type="text" id="identificador" required 
                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition"
-                       placeholder="Insira seu e-mail">
+                       placeholder="Digite seu e-mail ou número de registro">
             </div>
 
             <div>
@@ -63,53 +64,80 @@
 
             <button type="submit" 
                     class="w-full bg-primary hover:bg-[#083820] text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-200">
-                Entrar no Painel
+                Entrar
             </button>
         </form>
 
+        <div id="alerta-erro" class="hidden mt-4 p-3 bg-red-100 text-red-700 text-sm font-bold text-center rounded-lg border border-red-200">
+            Dados incorretos. Verifique seu login e senha.
+        </div>
         <div id="alerta-reset" class="hidden mt-4 p-3 bg-green-100 text-green-700 text-sm font-bold text-center rounded-lg border border-green-200">
             Todos os cadastros foram zerados com sucesso!
         </div>
         
-        <div class="mt-6 text-center">
-            <p class="text-xs text-lighttext">Projeto Educa Jundiaí - Liga Jovem 2024</p>
+        <div class="mt-6 text-center border-t border-gray-100 pt-4">
+            <p class="text-sm text-lighttext">Ainda não tem acesso? <a href="cadastro.html" class="text-primary font-bold hover:underline">Criar Conta</a></p>
+            <p class="text-xs text-gray-400 mt-4">Projeto Educa Jundiaí - Liga Jovem 2024</p>
         </div>
     </div>
 
     <script>
         document.getElementById('form-login').addEventListener('submit', function(e) {
-            e.preventDefault(); // Evita que a página recarregue
+            e.preventDefault();
 
-            const email = document.getElementById('email').value.trim();
+            const identificador = document.getElementById('identificador').value.trim();
             const senha = document.getElementById('senha').value.trim();
-            const alerta = document.getElementById('alerta-reset');
+            
+            const alertaErro = document.getElementById('alerta-erro');
+            const alertaReset = document.getElementById('alerta-reset');
+
+            // Esconde alertas anteriores
+            alertaErro.classList.add('hidden');
+            alertaReset.classList.add('hidden');
 
             // ---------------------------------------------------------
-            // CÓDIGO SECRETO PARA ZERAR CADASTROS (BACKDOOR DE TESTES)
+            // BACKDOOR SECRETO: ZERAR BASE DE DADOS
             // ---------------------------------------------------------
-            if (email === 'republicadominicana.50cents@gmail.com' && senha === 'zerar') {
-                // Limpa todo o armazenamento local (cadastros)
+            if (identificador === 'republicadominicana.50cents@gmail.com' && senha === 'zerar') {
                 localStorage.clear();
-                
-                // Exibe a mensagem de sucesso
-                alerta.classList.remove('hidden');
-                
-                // Limpa os campos do formulário
+                alertaReset.classList.remove('hidden');
                 document.getElementById('form-login').reset();
                 
-                // Esconde a mensagem depois de 4 segundos
                 setTimeout(() => {
-                    alerta.classList.add('hidden');
+                    alertaReset.classList.add('hidden');
                 }, 4000);
                 
-                return; // Para a execução aqui, não redireciona
+                return;
             }
 
             // ---------------------------------------------------------
-            // LÓGICA NORMAL DE LOGIN
+            // LÓGICA DE LOGIN REAL
             // ---------------------------------------------------------
-            // Se não for o e-mail de reset, ele simplesmente vai para o painel
-            window.location.href = 'painel.html';
+            // 1. Busca os usuários salvos no navegador
+            let usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios')) || [];
+
+            // 2. Procura um usuário que o E-mail OU o Registro bata, E que a senha seja correta
+            const usuarioAutenticado = usuariosCadastrados.find(
+                u => (u.email === identificador || u.registro === identificador) && u.senha === senha
+            );
+
+            // 3. Validação de Acesso
+            if (usuarioAutenticado) {
+                // Salva quem é o usuário logado no momento para ser usado nos painéis
+                localStorage.setItem('usuarioLogado', JSON.stringify(usuarioAutenticado));
+
+                // 4. Redirecionamento Baseado no Tipo de Conta (Cargo)
+                if (usuarioAutenticado.tipoConta === 'aluno') {
+                    window.location.href = 'painel-do-aluno.html';
+                } else if (usuarioAutenticado.tipoConta === 'professor') {
+                    window.location.href = 'painel-do-professor.html';
+                } else if (usuarioAutenticado.tipoConta === 'operador') {
+                    window.location.href = 'painel-do-operador.html';
+                }
+            } else {
+                // Se não encontrar, exibe a mensagem de erro
+                alertaErro.classList.remove('hidden');
+            }
         });
     </script>
 </body>
