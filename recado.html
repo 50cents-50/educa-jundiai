@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Comunicado - Educa Jundiaí</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0B4A2B', secondary: '#5CE1E6', bglight: '#F4F6F8', cardbg: '#FFFFFF', darktext: '#333333', lighttext: '#666666'
+                    }, fontFamily: { sans: ['Inter', 'sans-serif'], }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-bglight flex items-center justify-center min-h-screen p-4">
+
+    <div id="area-autenticacao" class="bg-cardbg p-8 sm:p-10 rounded-2xl shadow-xl w-full max-w-md border border-gray-100 hidden">
+        <div class="text-center mb-6">
+            <div class="flex justify-center mb-4">
+                <div class="h-16 w-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-3xl"><i class="ph ph-lock-key"></i></div>
+            </div>
+            <h2 class="text-2xl font-bold text-darktext">Acesso Restrito</h2>
+            <p class="text-sm text-lighttext mt-2">Apenas operadores podem emitir comunicados.</p>
+        </div>
+        <form id="form-auth-operador" class="space-y-5">
+            <div>
+                <label class="block text-sm font-medium text-darktext mb-1">Registro (RE)</label>
+                <input type="text" id="auth-registro" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-1 focus:ring-primary transition">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-darktext mb-1">Senha</label>
+                <input type="password" id="auth-senha" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-1 focus:ring-primary transition">
+            </div>
+            <button type="submit" class="w-full bg-primary hover:bg-[#083820] text-white font-bold py-3 px-4 rounded-lg shadow-md transition flex justify-center items-center gap-2">
+                <i class="ph ph-unlock text-lg"></i> Liberar Acesso
+            </button>
+            <div class="text-center mt-4 border-t border-gray-100 pt-4">
+                <a href="index.html" class="text-sm text-primary font-bold hover:underline">Voltar</a>
+            </div>
+        </form>
+        <p id="msg-erro-auth" class="hidden text-center text-xs text-red-600 mt-4 font-semibold">Credenciais incorretas.</p>
+    </div>
+
+    <div id="area-recado" class="bg-cardbg p-8 sm:p-10 rounded-2xl shadow-xl w-full max-w-2xl border border-gray-100 my-8 hidden">
+        
+        <div class="flex justify-between items-start mb-6 border-b border-gray-100 pb-4">
+            <div>
+                <h2 class="text-2xl font-bold text-darktext">Emitir Comunicado</h2>
+                <p class="text-sm text-lighttext mt-1">O recado será exibido para todos da escola <strong id="escola-operador" class="text-primary"></strong>.</p>
+            </div>
+            <a href="painel-do-operador.html" class="text-gray-400 hover:text-darktext transition bg-gray-100 p-2 rounded-lg">
+                <i class="ph ph-x text-xl"></i>
+            </a>
+        </div>
+
+        <form id="form-recado" class="space-y-5">
+            <div>
+                <label for="titulo" class="block text-sm font-medium text-darktext mb-1">Título do Aviso</label>
+                <input type="text" id="titulo" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition" placeholder="Ex: Reunião de Pais e Mestres">
+            </div>
+
+            <div>
+                <label for="mensagem" class="block text-sm font-medium text-darktext mb-1">Mensagem</label>
+                <textarea id="mensagem" required rows="4" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition resize-none" placeholder="Digite os detalhes do comunicado aqui..."></textarea>
+            </div>
+
+            <div>
+                <label for="foto" class="block text-sm font-medium text-darktext mb-1">Anexar Imagem <span class="text-xs text-gray-400 font-normal">(Opcional)</span></label>
+                <div class="flex items-center justify-center w-full">
+                    <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
+                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                            <i class="ph ph-image text-3xl text-gray-400 mb-2"></i>
+                            <p class="text-sm text-gray-500 font-semibold" id="nome-arquivo">Clique para anexar foto</p>
+                        </div>
+                        <input id="foto" type="file" accept="image/*" class="hidden" />
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-primary hover:bg-[#083820] text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-200 mt-4 flex justify-center items-center gap-2">
+                <i class="ph ph-paper-plane-right text-lg"></i> Publicar Mural
+            </button>
+        </form>
+
+        <div id="alerta-sucesso" class="hidden mt-4 p-4 bg-green-100 text-green-800 text-sm font-bold text-center rounded-lg border border-green-200 transition-all flex items-center justify-center gap-2">
+            <i class="ph ph-check-circle text-lg"></i> Comunicado publicado com sucesso!
+        </div>
+    </div>
+
+    <script>
+        // GATEKEEPER
+        const areaAuth = document.getElementById('area-autenticacao');
+        const areaRecado = document.getElementById('area-recado');
+        let operadorAtual = null;
+
+        function checarAcesso() {
+            const usuarioLogadoStr = localStorage.getItem('usuarioLogado');
+            if (usuarioLogadoStr) {
+                const usuario = JSON.parse(usuarioLogadoStr);
+                if (usuario.tipoConta === 'operador') {
+                    operadorAtual = usuario;
+                    liberarTela();
+                    return;
+                }
+            }
+            areaAuth.classList.remove('hidden'); // Pede senha
+        }
+
+        document.getElementById('form-auth-operador').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const re = document.getElementById('auth-registro').value.trim();
+            const senha = document.getElementById('auth-senha').value.trim();
+            const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+            
+            const valida = usuarios.find(u => u.registro === re && u.senha === senha && u.tipoConta === 'operador');
+            if (valida) {
+                operadorAtual = valida;
+                liberarTela();
+            } else {
+                document.getElementById('msg-erro-auth').classList.remove('hidden');
+            }
+        });
+
+        function liberarTela() {
+            areaAuth.classList.add('hidden');
+            areaRecado.classList.remove('hidden');
+            document.getElementById('escola-operador').innerText = operadorAtual.escola;
+        }
+        checarAcesso();
+
+        // MUDAR TEXTO DO INPUT FILE
+        document.getElementById('foto').addEventListener('change', function(e) {
+            const nomeArq = e.target.files[0] ? e.target.files[0].name : 'Clique para anexar foto';
+            document.getElementById('nome-arquivo').innerText = nomeArq;
+        });
+
+        // SALVAR RECADO
+        document.getElementById('form-recado').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Pegando a data atual formatada
+            const hoje = new Date();
+            const dataFormatada = `${hoje.getDate().toString().padStart(2, '0')}/${(hoje.getMonth()+1).toString().padStart(2, '0')}/${hoje.getFullYear()}`;
+
+            const novoRecado = {
+                id: Date.now(),
+                titulo: document.getElementById('titulo').value.trim(),
+                mensagem: document.getElementById('mensagem').value.trim(),
+                escola: operadorAtual.escola,
+                autor: `${operadorAtual.nome} ${operadorAtual.sobrenome}`,
+                data: dataFormatada,
+                foto: null
+            };
+
+            const inputFoto = document.getElementById('foto');
+            if (inputFoto.files && inputFoto.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    novoRecado.foto = evt.target.result;
+                    salvarNoBanco(novoRecado);
+                };
+                reader.readAsDataURL(inputFoto.files[0]);
+            } else {
+                salvarNoBanco(novoRecado);
+            }
+        });
+
+        function salvarNoBanco(recado) {
+            let comunicados = JSON.parse(localStorage.getItem('comunicados')) || [];
+            comunicados.push(recado);
+            localStorage.setItem('comunicados', JSON.stringify(comunicados));
+
+            const alerta = document.getElementById('alerta-sucesso');
+            alerta.classList.remove('hidden');
+            document.getElementById('form-recado').reset();
+            document.getElementById('nome-arquivo').innerText = 'Clique para anexar foto';
+            
+            // Redireciona de volta para o painel após 2 segundos
+            setTimeout(() => {
+                window.location.href = 'painel-do-operador.html';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
