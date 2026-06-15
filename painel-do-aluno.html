@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Aluno - Educa Jundiaí</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0B4A2B',    /* Verde Floresta Escuro */
+                        secondary: '#5CE1E6',  /* Verde Menta / Ciano */
+                        bglight: '#F4F6F8',    /* Cinzento Claro (Fundo) */
+                        cardbg: '#FFFFFF',     /* Fundo do Cartão */
+                        darktext: '#333333',
+                        lighttext: '#666666'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-bglight flex h-screen overflow-hidden">
+
+    <aside class="w-64 bg-cardbg border-r border-gray-200 flex flex-col justify-between hidden md:flex">
+        <div>
+            <div class="h-20 flex items-center px-6 border-b border-gray-100">
+                <span class="h-6 w-6 bg-secondary rounded-full block mr-3"></span>
+                <h1 class="text-2xl font-bold text-primary tracking-wider">50cents</h1>
+            </div>
+
+            <nav class="p-4 space-y-2">
+                <a href="#" class="flex items-center gap-3 px-4 py-3 bg-primary text-white rounded-lg font-medium transition shadow-sm">
+                    <i class="ph ph-house text-xl"></i> Início
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition">
+                    <i class="ph ph-exam text-xl"></i> Boletim e Notas
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition">
+                    <i class="ph ph-calendar-blank text-xl"></i> Horário de Aulas
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition">
+                    <i class="ph ph-check-square text-xl"></i> Frequência
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition">
+                    <i class="ph ph-megaphone text-xl"></i> Comunicados
+                </a>
+            </nav>
+        </div>
+
+        <div class="p-4 border-t border-gray-100">
+            <button id="btn-sair" class="w-full flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg font-medium transition">
+                <i class="ph ph-sign-out text-xl"></i> Sair do Sistema
+            </button>
+            <div class="mt-4 text-center">
+                <p class="text-xs text-gray-400">Liga Jovem 2024</p>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-full overflow-y-auto">
+        
+        <header class="bg-cardbg h-20 px-8 flex items-center justify-between border-b border-gray-100 shadow-sm">
+            <div>
+                <h2 class="text-xl font-bold text-darktext" id="saudacao">Olá, Aluno!</h2>
+                <p class="text-sm text-lighttext" id="info-escola">Bem-vindo ao seu portal educacional.</p>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <div class="text-right hidden sm:block">
+                    <p class="text-sm font-bold text-darktext" id="nome-perfil">Nome do Aluno</p>
+                    <p class="text-xs text-lighttext" id="ra-perfil">RA: 00000000</p>
+                </div>
+                <div class="h-12 w-12 rounded-full bg-gray-200 border-2 border-secondary overflow-hidden flex items-center justify-center">
+                    <img id="foto-perfil" src="" alt="Foto" class="h-full w-full object-cover hidden">
+                    <i id="icone-perfil" class="ph ph-user text-2xl text-gray-500"></i>
+                </div>
+            </div>
+        </header>
+
+        <div class="p-8">
+            <h3 class="text-lg font-bold text-darktext mb-6">Resumo Acadêmico</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-cardbg p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
+                    <div class="h-12 w-12 bg-green-100 text-primary rounded-full flex items-center justify-center text-2xl">
+                        <i class="ph ph-chart-line-up"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-lighttext">Média Geral</p>
+                        <p class="text-2xl font-bold text-darktext">8.5</p>
+                    </div>
+                </div>
+                <div class="bg-cardbg p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
+                    <div class="h-12 w-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl">
+                        <i class="ph ph-warning-circle"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-lighttext">Faltas no Bimestre</p>
+                        <p class="text-2xl font-bold text-darktext">2</p>
+                    </div>
+                </div>
+                <div class="bg-cardbg p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
+                    <div class="h-12 w-12 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center text-2xl">
+                        <i class="ph ph-book-open"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-lighttext">Tarefas Pendentes</p>
+                        <p class="text-2xl font-bold text-darktext">3</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-cardbg rounded-2xl shadow-sm border border-gray-100 p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold text-darktext">Quadro de Avisos Padrão</h3>
+                    <button class="text-primary text-sm font-semibold hover:underline">Ver todos</button>
+                </div>
+                <div class="space-y-4">
+                    <div class="p-4 bg-bglight rounded-lg border border-gray-200">
+                        <p class="text-sm font-bold text-darktext">Reunião de Pais e Mestres</p>
+                        <p class="text-xs text-lighttext mt-1">Data: 15 de Outubro. Não esqueça de avisar seus responsáveis.</p>
+                    </div>
+                    <div class="p-4 bg-bglight rounded-lg border border-gray-200">
+                        <p class="text-sm font-bold text-darktext">Feira de Ciências</p>
+                        <p class="text-xs text-lighttext mt-1">As inscrições para os projetos vão até sexta-feira.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // 1. Verifica se tem alguém logado. Se não tiver, chuta de volta pro Login.
+        const usuarioAtualStr = localStorage.getItem('usuarioLogado');
+        
+        if (!usuarioAtualStr) {
+            window.location.href = 'index.html';
+        } else {
+            const usuarioAtual = JSON.parse(usuarioAtualStr);
+
+            // Proteção de Rota: Se não for aluno, manda de volta
+            if (usuarioAtual.tipoConta !== 'aluno') {
+                alert('Acesso negado. Você não é um aluno.');
+                localStorage.removeItem('usuarioLogado'); // Limpa o login errado
+                window.location.href = 'index.html';
+            }
+
+            // 2. Atualiza a tela com as informações do Aluno
+            document.getElementById('saudacao').innerText = `Olá, ${usuarioAtual.nome}!`;
+            document.getElementById('nome-perfil').innerText = `${usuarioAtual.nome} ${usuarioAtual.sobrenome}`;
+            document.getElementById('ra-perfil').innerText = `RA: ${usuarioAtual.registro}`;
+            document.getElementById('info-escola').innerText = `Escola: ${usuarioAtual.escola}`;
+
+            // 3. Atualiza a foto se ele tiver cadastrado uma
+            if (usuarioAtual.foto) {
+                const imgTag = document.getElementById('foto-perfil');
+                const iconeTag = document.getElementById('icone-perfil');
+                
+                imgTag.src = usuarioAtual.foto;
+                imgTag.classList.remove('hidden');
+                iconeTag.classList.add('hidden');
+            }
+        }
+
+        // 4. Lógica do Botão de Sair
+        document.getElementById('btn-sair').addEventListener('click', function() {
+            // Remove apenas a sessão atual (não apaga os cadastros)
+            localStorage.removeItem('usuarioLogado');
+            // Redireciona para o login
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
