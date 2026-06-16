@@ -29,7 +29,6 @@
 </head>
 <body class="bg-bglight flex h-screen overflow-hidden">
 
-    <!-- BARRA LATERAL NAVEGAÇÃO -->
     <aside class="w-64 bg-cardbg border-r border-gray-200 flex flex-col justify-between hidden md:flex">
         <div>
             <div class="h-20 flex items-center px-6 border-b border-gray-100">
@@ -40,8 +39,8 @@
                 <button id="menu-inicio" class="w-full flex items-center gap-3 px-4 py-3 bg-primary text-white rounded-lg font-medium transition shadow-sm">
                     <i class="ph ph-squares-four text-xl"></i> Visão Geral
                 </button>
-                <button id="menu-diario" class="w-full flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition">
-                    <i class="ph ph-notebook text-xl"></i> Diário de Classe
+                <button id="menu-turmas" class="w-full flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition">
+                    <i class="ph ph-users-three text-xl"></i> Minhas turmas
                 </button>
                 <button id="menu-mural" class="w-full flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition">
                     <i class="ph ph-megaphone text-xl"></i> Mural da Escola
@@ -56,7 +55,6 @@
         </div>
     </aside>
 
-    <!-- CONTEÚDO PRINCIPAL -->
     <main class="flex-1 flex flex-col h-full overflow-y-auto relative">
         <header class="bg-cardbg h-20 px-8 flex items-center justify-between border-b border-gray-100 shadow-sm shrink-0">
             <div>
@@ -75,7 +73,6 @@
             </div>
         </header>
 
-        <!-- ABA 1: VISÃO GERAL (DASHBOARD) -->
         <div id="sessao-dashboard" class="p-8 block">
             <h3 class="text-lg font-bold text-darktext mb-6">Minhas Atividades</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -94,19 +91,17 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Atalhos -->
                 <div class="bg-cardbg rounded-2xl shadow-sm border border-gray-100 p-6">
                     <h3 class="text-lg font-bold text-darktext mb-4">Ações do Professor</h3>
                     <div class="grid grid-cols-2 gap-4">
-                        <button id="btn-acao-diario" class="p-4 border border-gray-200 rounded-xl hover:bg-green-50 hover:border-primary transition group flex flex-col items-center justify-center text-center gap-2">
-                            <i class="ph ph-notebook text-3xl text-lighttext group-hover:text-primary"></i><span class="text-sm font-semibold text-darktext group-hover:text-primary">Abrir Diário</span>
+                        <button id="btn-acao-turmas" class="p-4 border border-gray-200 rounded-xl hover:bg-green-50 hover:border-primary transition group flex flex-col items-center justify-center text-center gap-2">
+                            <i class="ph ph-users-three text-3xl text-lighttext group-hover:text-primary"></i><span class="text-sm font-semibold text-darktext group-hover:text-primary">Minhas turmas</span>
                         </button>
                         <button id="btn-acao-mural" class="p-4 border border-gray-200 rounded-xl hover:bg-green-50 hover:border-primary transition group flex flex-col items-center justify-center text-center gap-2">
                             <i class="ph ph-megaphone text-3xl text-lighttext group-hover:text-primary"></i><span class="text-sm font-semibold text-darktext group-hover:text-primary">Ver Mural</span>
                         </button>
                     </div>
                 </div>
-                <!-- Horários Simples -->
                 <div class="bg-cardbg rounded-2xl shadow-sm border border-gray-100 p-6">
                     <h3 class="text-lg font-bold text-darktext mb-4">Cronograma de Hoje</h3>
                     <div class="space-y-3">
@@ -123,27 +118,15 @@
             </div>
         </div>
 
-        <!-- ABA 2: DIÁRIO DE CLASSE -->
-        <div id="sessao-diario" class="p-8 hidden">
+        <div id="sessao-turmas" class="p-8 hidden">
             <div class="mb-6">
-                <h3 class="text-2xl font-bold text-darktext">Diário de Classe</h3>
-                <p class="text-sm text-lighttext mt-1">Lista de alunos cadastrados na sua escola para controle pedagógico.</p>
+                <h3 class="text-2xl font-bold text-darktext">Minhas turmas</h3>
+                <p class="text-sm text-lighttext mt-1">Alunos da sua escola separados por sala para controle pedagógico.</p>
             </div>
-            <div class="bg-cardbg rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-bglight text-darktext text-sm border-b border-gray-200">
-                            <th class="px-6 py-4 font-bold">Aluno</th>
-                            <th class="px-6 py-4 font-bold">Matrícula/RA</th>
-                            <th class="px-6 py-4 font-bold text-center">Frequência</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabela-alunos-body" class="divide-y divide-gray-100"></tbody>
-                </table>
-            </div>
+            
+            <div id="container-turmas"></div>
         </div>
 
-        <!-- ABA 3: MURAL DE COMUNICADOS (LEITURA FILTRADA) -->
         <div id="sessao-mural" class="p-8 hidden">
             <div class="mb-6">
                 <h3 class="text-2xl font-bold text-darktext">Mural da Escola</h3>
@@ -167,7 +150,7 @@
                 alert('Acesso restrito ao corpo docente.');
                 window.location.href = 'index.html';
             }
-            // Populando informações visuais
+            
             document.getElementById('saudacao').innerText = `Olá, Prof. ${usuarioAtual.nome}!`;
             document.getElementById('nome-perfil').innerText = `${usuarioAtual.nome} ${usuarioAtual.sobrenome}`;
             document.getElementById('re-perfil').innerText = `RE: ${usuarioAtual.registro}`;
@@ -185,11 +168,9 @@
             const todosUsuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
             const escolaAtual = usuarioAtual.escola.trim().toLowerCase();
             
-            // Filtra alunos apenas da mesma escola
             const alunosDaEscola = todosUsuarios.filter(u => u.escola.trim().toLowerCase() === escolaAtual && u.tipoConta === 'aluno');
             document.getElementById('total-alunos').innerText = alunosDaEscola.length;
 
-            // Filtra comunicados para saber quantos avisos válidos existem
             const comunicados = JSON.parse(localStorage.getItem('comunicados')) || [];
             const avisosValidos = comunicados.filter(c => 
                 c.escola.trim().toLowerCase() === escolaAtual && 
@@ -200,65 +181,118 @@
 
         // ALTERNÂNCIA DE ABAS
         const sDashboard = document.getElementById('sessao-dashboard');
-        const sDiario = document.getElementById('sessao-diario');
+        const sTurmas = document.getElementById('sessao-turmas');
         const sMural = document.getElementById('sessao-mural');
         
         const btnInicio = document.getElementById('menu-inicio');
-        const btnDiario = document.getElementById('menu-diario');
+        const btnTurmas = document.getElementById('menu-turmas');
         const btnMural = document.getElementById('menu-mural');
 
         function limparNavegacao() {
             const inativo = "w-full flex items-center gap-3 px-4 py-3 text-lighttext hover:bg-green-50 hover:text-primary rounded-lg font-medium transition";
             btnInicio.className = inativo;
-            btnDiario.className = inativo;
+            btnTurmas.className = inativo;
             btnMural.className = inativo;
             sDashboard.classList.add('hidden');
-            sDiario.classList.add('hidden');
+            sTurmas.classList.add('hidden');
             sMural.classList.add('hidden');
         }
 
         const ativo = "w-full flex items-center gap-3 px-4 py-3 bg-primary text-white rounded-lg font-medium transition shadow-sm";
 
         btnInicio.addEventListener('click', () => { limparNavegacao(); btnInicio.className = ativo; sDashboard.classList.remove('hidden'); gerarMetricasIniciais(); });
-        btnDiario.addEventListener('click', () => { limparNavegacao(); btnDiario.className = ativo; sDiario.classList.remove('hidden'); carregarAlunosDiario(); });
+        btnTurmas.addEventListener('click', () => { limparNavegacao(); btnTurmas.className = ativo; sTurmas.classList.remove('hidden'); carregarTurmasAgrupadas(); });
         btnMural.addEventListener('click', () => { limparNavegacao(); btnMural.className = ativo; sMural.classList.remove('hidden'); carregarMuralFiltrado(); });
         
         // Atalhos do Dashboard
-        document.getElementById('btn-acao-diario').addEventListener('click', () => btnDiario.click());
+        document.getElementById('btn-acao-turmas').addEventListener('click', () => btnTurmas.click());
         document.getElementById('btn-acao-mural').addEventListener('click', () => btnMural.click());
 
-        // CARREGAR ALUNOS NO DIÁRIO
-        function carregarAlunosDiario() {
+        // CARREGAR E AGRUPAR ALUNOS POR SÉRIE E TURMA
+        function carregarTurmasAgrupadas() {
             const todos = JSON.parse(localStorage.getItem('usuarios')) || [];
-            const tbody = document.getElementById('tabela-alunos-body');
-            tbody.innerHTML = ''; 
+            const container = document.getElementById('container-turmas');
+            container.innerHTML = ''; 
             
+            // Pega apenas alunos da mesma escola do professor
             const alunos = todos.filter(u => u.escola.trim().toLowerCase() === usuarioAtual.escola.trim().toLowerCase() && u.tipoConta === 'aluno');
 
             if(alunos.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="3" class="px-6 py-8 text-center text-lighttext">Nenhum aluno cadastrado nesta escola.</td></tr>`;
+                container.innerHTML = `<div class="p-8 text-center bg-cardbg border border-gray-100 rounded-2xl shadow-sm text-lighttext">Nenhum aluno cadastrado nesta escola.</div>`;
                 return;
             }
 
-            alunos.forEach(a => {
-                tbody.innerHTML += `
-                    <tr class="hover:bg-gray-50 transition border-b border-gray-100">
-                        <td class="px-6 py-4 font-bold text-darktext">${a.nome} ${a.sobrenome}</td>
-                        <td class="px-6 py-4 text-sm text-lighttext">${a.registro}</td>
-                        <td class="px-6 py-4 text-center">
-                            <span class="text-xs font-semibold bg-green-100 text-green-800 px-3 py-1 rounded-full">100% Presença</span>
-                        </td>
-                    </tr>`;
+            // Agrupa os alunos por "Série - Turma"
+            const turmasAgrupadas = {};
+            
+            alunos.forEach(aluno => {
+                const serie = aluno.serie || 'Série não informada';
+                const turma = aluno.turma ? `Turma ${aluno.turma}` : 'Sem turma';
+                const nomeDaSala = `${serie} - ${turma}`;
+
+                if (!turmasAgrupadas[nomeDaSala]) {
+                    turmasAgrupadas[nomeDaSala] = [];
+                }
+                turmasAgrupadas[nomeDaSala].push(aluno);
+            });
+
+            // Ordena as turmas pelo nome para ficar organizado na tela
+            const chavesOrdenadas = Object.keys(turmasAgrupadas).sort();
+
+            // Renderiza uma tabela para cada turma encontrada
+            chavesOrdenadas.forEach(nomeDaSala => {
+                const alunosDestaSala = turmasAgrupadas[nomeDaSala];
+                
+                // Ordena os alunos alfabeticamente dentro da turma
+                alunosDestaSala.sort((a, b) => a.nome.localeCompare(b.nome));
+
+                let linhasTabelaHTML = '';
+                alunosDestaSala.forEach(a => {
+                    linhasTabelaHTML += `
+                        <tr class="hover:bg-gray-50 transition border-b border-gray-100">
+                            <td class="px-6 py-4 font-bold text-darktext">${a.nome} ${a.sobrenome}</td>
+                            <td class="px-6 py-4 text-sm text-lighttext">${a.registro}</td>
+                            <td class="px-6 py-4 text-center">
+                                <span class="text-xs font-semibold bg-green-100 text-green-800 px-3 py-1 rounded-full">100% Presença</span>
+                            </td>
+                        </tr>`;
+                });
+
+                // Cria o bloco HTML da turma com cabeçalho (verde claro) e a tabela abaixo
+                container.innerHTML += `
+                    <div class="bg-cardbg rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+                        <div class="bg-primary/5 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                            <h4 class="font-bold text-primary text-lg flex items-center gap-2">
+                                <i class="ph ph-users-three text-xl"></i> ${nomeDaSala}
+                            </h4>
+                            <span class="text-xs font-bold text-primary bg-primary/10 px-3 py-1.5 rounded-lg">
+                                ${alunosDestaSala.length} Aluno(s)
+                            </span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-bglight text-darktext text-sm border-b border-gray-200">
+                                        <th class="px-6 py-3 font-bold">Aluno</th>
+                                        <th class="px-6 py-3 font-bold">Matrícula/RA</th>
+                                        <th class="px-6 py-3 font-bold text-center">Frequência</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100">
+                                    ${linhasTabelaHTML}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>`;
             });
         }
 
-        // CARREGAR MURAL FILTRADO (APENAS PROFESSORES / TODOS)
+        // CARREGAR MURAL FILTRADO
         function carregarMuralFiltrado() {
             const grid = document.getElementById('grid-comunicados');
             grid.innerHTML = '';
             const comunicados = JSON.parse(localStorage.getItem('comunicados')) || [];
             
-            // Regra crucial: Mesma escola && (para professores OU para todos)
             const recadosFiltrados = comunicados.filter(c => 
                 c.escola.trim().toLowerCase() === usuarioAtual.escola.trim().toLowerCase() &&
                 (c.publico === 'professores' || c.publico === 'todos')
