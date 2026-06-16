@@ -61,7 +61,7 @@
         <div class="flex justify-between items-start mb-6 border-b border-gray-100 pb-4">
             <div>
                 <h2 class="text-2xl font-bold text-darktext">Emitir Comunicado</h2>
-                <p class="text-sm text-lighttext mt-1">O recado será exibido para todos da escola <strong id="escola-operador" class="text-primary"></strong>.</p>
+                <p class="text-sm text-lighttext mt-1">O recado será exibido para a escola <strong id="escola-operador" class="text-primary"></strong>.</p>
             </div>
             <a href="painel-do-operador.html" class="text-gray-400 hover:text-darktext transition bg-gray-100 p-2 rounded-lg" title="Fechar">
                 <i class="ph ph-x text-xl"></i>
@@ -69,6 +69,15 @@
         </div>
 
         <form id="form-recado" class="space-y-5">
+            <div>
+                <label for="publico" class="block text-sm font-medium text-darktext mb-1">Público-Alvo</label>
+                <select id="publico" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition bg-white">
+                    <option value="todos">Todos (Geral)</option>
+                    <option value="alunos">Somente Alunos</option>
+                    <option value="professores">Somente Professores</option>
+                </select>
+            </div>
+
             <div>
                 <label for="titulo" class="block text-sm font-medium text-darktext mb-1">Título do Aviso</label>
                 <input type="text" id="titulo" required 
@@ -114,7 +123,6 @@
         const areaRecado = document.getElementById('area-recado');
         let operadorAtual = null;
 
-        // Ao carregar a página, sempre mostra o bloqueio primeiro
         function iniciarBloqueio() {
             areaAuth.classList.remove('hidden');
             areaRecado.classList.add('hidden');
@@ -126,7 +134,6 @@
             const senha = document.getElementById('auth-senha').value.trim();
             const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
             
-            // Verifica se as credenciais batem e se a pessoa é Operador
             const valida = usuarios.find(u => u.registro === re && u.senha === senha && u.tipoConta === 'operador');
             
             if (valida) {
@@ -141,28 +148,23 @@
         function liberarTela() {
             areaAuth.classList.add('hidden');
             areaRecado.classList.remove('hidden');
-            // Preenche o nome da escola do operador na tela para confirmar onde o recado vai parar
             document.getElementById('escola-operador').innerText = operadorAtual.escola;
         }
 
-        // Chama a função de bloqueio imediatamente
         iniciarBloqueio();
 
         // ==========================================
         // LÓGICA DO FORMULÁRIO DE RECADO
         // ==========================================
         
-        // Mudar o texto para mostrar o nome da foto anexada
         document.getElementById('foto').addEventListener('change', function(e) {
             const nomeArq = e.target.files[0] ? e.target.files[0].name : 'Clique para anexar foto';
             document.getElementById('nome-arquivo').innerText = nomeArq;
         });
 
-        // Salvar o recado no LocalStorage
         document.getElementById('form-recado').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // Pegando a data atual formatada (DD/MM/AAAA)
             const hoje = new Date();
             const dataFormatada = `${hoje.getDate().toString().padStart(2, '0')}/${(hoje.getMonth()+1).toString().padStart(2, '0')}/${hoje.getFullYear()}`;
 
@@ -170,7 +172,8 @@
                 id: Date.now(),
                 titulo: document.getElementById('titulo').value.trim(),
                 mensagem: document.getElementById('mensagem').value.trim(),
-                escola: operadorAtual.escola, // Amarra o recado à escola do operador!
+                publico: document.getElementById('publico').value,
+                escola: operadorAtual.escola,
                 autor: `${operadorAtual.nome} ${operadorAtual.sobrenome}`,
                 data: dataFormatada,
                 foto: null
@@ -194,7 +197,6 @@
             comunicados.push(recado);
             localStorage.setItem('comunicados', JSON.stringify(comunicados));
 
-            // Feedback visual e redirecionamento
             const alerta = document.getElementById('alerta-sucesso');
             alerta.classList.remove('hidden');
             document.getElementById('form-recado').reset();
