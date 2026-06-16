@@ -121,48 +121,20 @@
         </div>
 
         <div id="sessao-comunicados" class="p-8 hidden">
-            <div class="mb-6">
-                <h3 class="text-2xl font-bold text-darktext">Comunicados Gerais</h3>
-                <p class="text-sm text-lighttext mt-1">Crie e dispare avisos para o mural da escola (Alunos e Professores).</p>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                <div>
+                    <h3 class="text-2xl font-bold text-darktext">Comunicados Gerais</h3>
+                    <p class="text-sm text-lighttext mt-1">Gerencie os avisos enviados para o mural da escola (Alunos e Professores).</p>
+                </div>
+                <button onclick="window.location.href='recado.html'" class="bg-primary hover:bg-[#083820] text-white px-5 py-2.5 rounded-xl font-semibold shadow-sm transition flex items-center gap-2">
+                    <i class="ph ph-plus-circle text-xl"></i> Novo Comunicado
+                </button>
             </div>
             
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="bg-cardbg rounded-2xl shadow-sm border border-gray-100 p-6">
-                    <h4 class="text-lg font-bold text-darktext mb-4 border-b border-gray-100 pb-2">Novo Comunicado</h4>
-                    <form id="form-comunicado" class="space-y-4">
-                        <div>
-                            <label for="com-titulo" class="block text-sm font-medium text-darktext mb-1">Título do Aviso</label>
-                            <input type="text" id="com-titulo" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-primary focus:border-primary outline-none transition">
-                        </div>
-                        <div>
-                            <label for="com-mensagem" class="block text-sm font-medium text-darktext mb-1">Mensagem</label>
-                            <textarea id="com-mensagem" required rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-primary focus:border-primary outline-none transition"></textarea>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label for="com-publico" class="block text-sm font-medium text-darktext mb-1">Público Alvo</label>
-                                <select id="com-publico" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-primary focus:border-primary outline-none transition bg-white">
-                                    <option value="todos">Todos (Alunos e Professores)</option>
-                                    <option value="professores">Apenas Professores</option>
-                                    <option value="alunos">Apenas Alunos</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="com-foto" class="block text-sm font-medium text-darktext mb-1">Anexar Imagem <span class="text-xs text-gray-400 font-normal">(Opcional)</span></label>
-                                <input type="file" id="com-foto" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-primary hover:file:bg-green-100 cursor-pointer transition">
-                            </div>
-                        </div>
-                        <button type="submit" class="w-full bg-primary hover:bg-[#083820] text-white font-bold py-3 rounded-xl shadow-md transition flex justify-center items-center gap-2 mt-4">
-                            <i class="ph ph-paper-plane-right text-xl"></i> Publicar no Mural
-                        </button>
-                    </form>
-                </div>
-
-                <div class="bg-cardbg rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col h-full">
-                    <h4 class="text-lg font-bold text-darktext mb-4 border-b border-gray-100 pb-2">Últimos Envios</h4>
-                    <div id="lista-comunicados-enviados" class="space-y-3 overflow-y-auto flex-grow max-h-[400px]">
-                        </div>
-                </div>
+            <div class="bg-cardbg rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col min-h-[400px]">
+                <h4 class="text-lg font-bold text-darktext mb-4 border-b border-gray-100 pb-2">Recados Enviados</h4>
+                <div id="lista-comunicados-enviados" class="space-y-3 overflow-y-auto flex-grow">
+                    </div>
             </div>
         </div>
 
@@ -173,7 +145,6 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                
                 <div class="bg-cardbg rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="p-3 bg-blue-50 text-blue-600 rounded-lg"><i class="ph ph-users-three text-2xl"></i></div>
@@ -242,10 +213,8 @@
                     </div>
                     <button class="mt-auto w-full py-2 bg-red-50 hover:bg-red-100 text-red-600 font-semibold rounded-lg text-sm transition">Resolver Pendências</button>
                 </div>
-
             </div>
         </div>
-
     </main>
 
     <script>
@@ -357,45 +326,7 @@
             }
         }
 
-        // LÓGICA DE COMUNICADOS (CRIAR, LISTAR, DELETAR)
-        let fotoComunicadoBase64 = null;
-        
-        document.getElementById('com-foto').addEventListener('change', function(e) {
-            if (e.target.files && e.target.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(evt) { fotoComunicadoBase64 = evt.target.result; };
-                reader.readAsDataURL(e.target.files[0]);
-            } else {
-                fotoComunicadoBase64 = null;
-            }
-        });
-
-        document.getElementById('form-comunicado').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const novoComunicado = {
-                id: Date.now().toString(),
-                titulo: document.getElementById('com-titulo').value.trim(),
-                mensagem: document.getElementById('com-mensagem').value.trim(),
-                publico: document.getElementById('com-publico').value,
-                foto: fotoComunicadoBase64,
-                data: new Date().toLocaleDateString('pt-BR'),
-                autor: `${usuarioAtual.nome} ${usuarioAtual.sobrenome}`,
-                escola: usuarioAtual.escola
-            };
-
-            let comunicados = JSON.parse(localStorage.getItem('comunicados')) || [];
-            comunicados.push(novoComunicado);
-            localStorage.setItem('comunicados', JSON.stringify(comunicados));
-
-            alert('Comunicado publicado com sucesso!');
-            document.getElementById('form-comunicado').reset();
-            fotoComunicadoBase64 = null;
-            
-            carregarListaComunicados();
-            carregarDadosGerais(); // Atualiza contador do dashboard
-        });
-
+        // LÓGICA DE LISTAGEM DE COMUNICADOS GERAIS
         function carregarListaComunicados() {
             const container = document.getElementById('lista-comunicados-enviados');
             container.innerHTML = '';
@@ -404,7 +335,7 @@
             const meusComunicados = comunicados.filter(c => c.escola.trim().toLowerCase() === usuarioAtual.escola.trim().toLowerCase());
 
             if (meusComunicados.length === 0) {
-                container.innerHTML = '<p class="text-sm text-lighttext text-center py-4 bg-gray-50 rounded-lg border border-gray-100">Nenhum comunicado enviado.</p>';
+                container.innerHTML = '<p class="text-sm text-lighttext text-center py-8 bg-gray-50 rounded-lg border border-gray-100">Nenhum comunicado enviado. Clique em "Novo Comunicado" para começar.</p>';
                 return;
             }
 
@@ -413,16 +344,19 @@
                 let badgePub = c.publico === 'todos' ? 'bg-green-100 text-green-700' : 
                                c.publico === 'professores' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700';
                 
+                // Card de comunicado expandido para ocupar o layout todo
                 container.innerHTML += `
-                    <div class="bg-gray-50 border border-gray-100 p-4 rounded-xl flex justify-between items-start gap-4">
+                    <div class="bg-gray-50 border border-gray-100 p-5 rounded-xl flex justify-between items-start gap-4">
                         <div class="flex-grow">
-                            <h5 class="font-bold text-darktext text-sm">${c.titulo}</h5>
-                            <div class="flex items-center gap-2 mt-1">
-                                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase ${badgePub}">${c.publico}</span>
-                                <span class="text-xs text-lighttext">${c.data}</span>
+                            <h5 class="font-bold text-darktext text-base">${c.titulo}</h5>
+                            <p class="text-sm text-lighttext mt-2 mb-3 line-clamp-2">${c.mensagem}</p>
+                            <div class="flex items-center gap-3 mt-1">
+                                <span class="px-2 py-1 rounded text-[10px] font-bold uppercase ${badgePub}">${c.publico}</span>
+                                <span class="text-xs text-lighttext font-medium"><i class="ph ph-calendar-blank"></i> ${c.data}</span>
+                                <span class="text-xs text-lighttext font-medium"><i class="ph ph-user"></i> ${c.autor}</span>
                             </div>
                         </div>
-                        <button onclick="excluirComunicado('${c.id}')" class="text-red-400 hover:text-red-600 transition flex-shrink-0" title="Apagar Aviso">
+                        <button onclick="excluirComunicado('${c.id}')" class="p-2 bg-white rounded-lg border border-gray-200 text-red-400 hover:text-red-600 hover:bg-red-50 transition flex-shrink-0 shadow-sm" title="Apagar Aviso">
                             <i class="ph ph-trash text-xl"></i>
                         </button>
                     </div>
@@ -440,7 +374,6 @@
                 carregarDadosGerais();
             }
         }
-
 
         // NAVEGAÇÃO DE ABAS
         const sDashboard = document.getElementById('sessao-dashboard');
@@ -466,7 +399,7 @@
         bComun.addEventListener('click', () => { limparNav(); bComun.className = ativo; sComunicados.classList.remove('hidden'); });
         bRelat.addEventListener('click', () => { limparNav(); bRelat.className = ativo; sRelatorios.classList.remove('hidden'); });
 
-        // INICIAR NA ABA COMUNICADOS (Para você testar agora mesmo)
+        // INICIAR NA ABA DE COMUNICADOS (Para facilitar seus testes agora)
         bComun.click();
 
         // LOGOUT
